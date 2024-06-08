@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
 // GET all users
 router.get('/', async (req, res) => {
@@ -26,7 +27,7 @@ router.get('/:userId', async (req, res) => {
 });
 
 // POST create a new user
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, authorizeRoles('admin'), async (req, res) => {
   try {
     const user = await User.create(req.body);
     res.status(201).json(user);
@@ -36,7 +37,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT update user details
-router.put('/:userId', async (req, res) => {
+router.put('/:userId', authenticateToken, authorizeRoles('admin'), async (req, res) => {
   try {
     const user = await User.findByPk(req.params.userId);
     if (!user) {
@@ -50,7 +51,7 @@ router.put('/:userId', async (req, res) => {
 });
 
 // DELETE delete user
-router.delete('/:userId', async (req, res) => {
+router.delete('/:userId', authenticateToken, authorizeRoles('admin'), async (req, res) => {
   try {
     const user = await User.findByPk(req.params.userId);
     if (!user) {

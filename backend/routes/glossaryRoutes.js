@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Glossary = require('../models/Glossary');
+const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
 // GET all glossary items
 router.get('/glossary', async (req, res) => {
@@ -13,7 +14,7 @@ router.get('/glossary', async (req, res) => {
 });
 
 // POST add new glossary item
-router.post('/glossary', async (req, res) => {
+router.post('/glossary', authenticateToken, authorizeRoles('user', 'admin'), async (req, res) => {
   try {
     const glossaryItem = await Glossary.create(req.body);
     res.status(201).json(glossaryItem);

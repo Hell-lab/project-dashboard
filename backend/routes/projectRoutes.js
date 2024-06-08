@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Project = require('../models/Project');
+const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
 // GET all projects
 router.get('/', async (req, res) => {
@@ -26,7 +27,7 @@ router.get('/:projectId', async (req, res) => {
 });
 
 // POST create a new project
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, authorizeRoles('user', 'admin'), async (req, res) => {
   try {
     const project = await Project.create(req.body);
     res.status(201).json(project);
@@ -36,7 +37,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT update project details
-router.put('/:projectId', async (req, res) => {
+router.put('/:projectId', authenticateToken, authorizeRoles('user', 'admin'), async (req, res) => {
   try {
     const project = await Project.findByPk(req.params.projectId);
     if (!project) {
@@ -50,7 +51,7 @@ router.put('/:projectId', async (req, res) => {
 });
 
 // DELETE delete project
-router.delete('/:projectId', async (req, res) => {
+router.delete('/:projectId', authenticateToken, authorizeRoles('user', 'admin'), async (req, res) => {
   try {
     const project = await Project.findByPk(req.params.projectId);
     if (!project) {

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const RoleDict = require('../models/RoleDict');
+const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
 // GET all roles
 router.get('/roles', async (req, res) => {
@@ -13,7 +14,7 @@ router.get('/roles', async (req, res) => {
 });
 
 // POST create a new role
-router.post('/roles', async (req, res) => {
+router.post('/roles', authenticateToken, authorizeRoles('admin'), async (req, res) => {
   try {
     const role = await RoleDict.create(req.body);
     res.status(201).json(role);

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const MilestoneDict = require('../models/MilestoneDict');
+const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
 // GET all milestones
 router.get('/milestones', async (req, res) => {
@@ -13,7 +14,7 @@ router.get('/milestones', async (req, res) => {
 });
 
 // POST create a new milestone
-router.post('/milestones', async (req, res) => {
+router.post('/milestones', authenticateToken, authorizeRoles('user', 'admin'), async (req, res) => {
   try {
     const milestone = await MilestoneDict.create(req.body);
     res.status(201).json(milestone);

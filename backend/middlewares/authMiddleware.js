@@ -12,4 +12,12 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-module.exports = authenticateToken;
+const authorizeRoles = (...roles) => {
+  return (req, res, next) => {
+    if (!req.user) return res.sendStatus(401); // Ensure user is authenticated
+    if (!roles.includes(req.user.role)) return res.sendStatus(403); // Check if the user's role is authorized
+    next();
+  };
+};
+
+module.exports = { authenticateToken, authorizeRoles };

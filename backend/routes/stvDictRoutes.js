@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const StvDict = require('../models/StvDict');
+const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
 // GET all items in the StvDict
 router.get('/stvDict', async (req, res) => {
@@ -13,7 +14,7 @@ router.get('/stvDict', async (req, res) => {
 });
 
 // POST create a new item in the StvDict
-router.post('/stvDict', async (req, res) => {
+router.post('/stvDict', authenticateToken, authorizeRoles('admin'), async (req, res) => {
   try {
     const item = await StvDict.create(req.body);
     res.status(201).json(item);

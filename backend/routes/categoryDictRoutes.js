@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const CategoryDict = require('../models/CategoryDict');
+const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
 // GET all categories
 router.get('/categories', async (req, res) => {
@@ -13,7 +14,7 @@ router.get('/categories', async (req, res) => {
 });
 
 // POST create a new category
-router.post('/categories', async (req, res) => {
+router.post('/categories', authenticateToken, authorizeRoles('admin'), async (req, res) => {
   try {
     const category = await CategoryDict.create(req.body);
     res.status(201).json(category);

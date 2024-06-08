@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Team = require('../models/Team');
+const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
 // GET all team members of a project
 router.get('/projects/:projectId/team', async (req, res) => {
@@ -13,7 +14,7 @@ router.get('/projects/:projectId/team', async (req, res) => {
 });
 
 // POST add new team member to a project
-router.post('/projects/:projectId/team', async (req, res) => {
+router.post('/projects/:projectId/team', authenticateToken, authorizeRoles('user', 'admin'), async (req, res) => {
   try {
     const { projectId } = req.params;
     const { userId } = req.body;
@@ -29,7 +30,7 @@ router.post('/projects/:projectId/team', async (req, res) => {
 });
 
 // DELETE remove a team member from a project
-router.delete('/projects/:projectId/team/:userId', async (req, res) => {
+router.delete('/projects/:projectId/team/:userId', authenticateToken, authorizeRoles('user', 'admin'), async (req, res) => {
   try {
     const { projectId, userId } = req.params;
     const teamMember = await Team.findOne({ where: { projectId, userId } });

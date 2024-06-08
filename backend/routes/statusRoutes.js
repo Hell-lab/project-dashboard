@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Status = require('../models/Status');
+const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
 // GET all statuses
 router.get('/', async (req, res) => {
@@ -26,7 +27,7 @@ router.get('/:statusId', async (req, res) => {
 });
 
 // POST create a new status
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, authorizeRoles('user', 'admin'), async (req, res) => {
   try {
     const status = await Status.create(req.body);
     res.status(201).json(status);
@@ -36,7 +37,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT update status details
-router.put('/:statusId', async (req, res) => {
+router.put('/:statusId', authenticateToken, authorizeRoles('user', 'admin'), async (req, res) => {
   try {
     const status = await Status.findByPk(req.params.statusId);
     if (!status) {
@@ -50,7 +51,7 @@ router.put('/:statusId', async (req, res) => {
 });
 
 // DELETE delete status
-router.delete('/:statusId', async (req, res) => {
+router.delete('/:statusId', authenticateToken, authorizeRoles('admin'), async (req, res) => {
   try {
     const status = await Status.findByPk(req.params.statusId);
     if (!status) {
