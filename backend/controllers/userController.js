@@ -1,7 +1,7 @@
 const User = require('../models/User');
 
 const userController = {
-  getAllUsers: async (req, res) => {
+  findAllUsers: async (req, res) => {
     try {
       const users = await User.findAll();
       res.json(users);
@@ -31,7 +31,7 @@ const userController = {
     }
   },
 
-  updateUser: async (req, res) => {
+  modifyUser: async (req, res) => {
     try {
       const user = await User.findByPk(req.params.userId);
       if (!user) {
