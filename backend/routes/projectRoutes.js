@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const Project = require('../models/Project');
-const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
+const { addProject, findAllProjects, getProjectById, deleteProject, modifyProject } = require('../services/projectService');
+const { isLoggedIn } = require('../middlewares/authMiddleware');
 
 // GET all projects
 router.get('/', async (req, res) => {
   try {
-    const projects = await Project.findAll();
+    const projects = await findAllProjects();
     res.json(projects);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -16,10 +16,7 @@ router.get('/', async (req, res) => {
 // GET project by ID
 router.get('/:projectId', async (req, res) => {
   try {
-    const project = await Project.findByPk(req.params.projectId);
-    if (!project) {
-      return res.status(404).json({ message: 'Project not found' });
-    }
+    const project = await getProjectById(req.params.projectId);
     res.json(project);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -27,9 +24,9 @@ router.get('/:projectId', async (req, res) => {
 });
 
 // POST create a new project
-router.post('/', authenticateToken, authorizeRoles('user', 'admin'), async (req, res) => {
+router.post('/', isLoggedIn, async (req, res) => {
   try {
-    const project = await Project.create(req.body);
+    const project = await addProject(req.body);
     res.status(201).json(project);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -37,13 +34,9 @@ router.post('/', authenticateToken, authorizeRoles('user', 'admin'), async (req,
 });
 
 // PUT update project details
-router.put('/:projectId', authenticateToken, authorizeRoles('user', 'admin'), async (req, res) => {
+router.put('/:projectId', isLoggedIn, async (req, res) => {
   try {
-    const project = await Project.findByPk(req.params.projectId);
-    if (!project) {
-      return res.status(404).json({ message: 'Project not found' });
-    }
-    await project.update(req.body);
+    const project = await modifyProject(req.params.projectId, req.body);
     res.json(project);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -51,13 +44,9 @@ router.put('/:projectId', authenticateToken, authorizeRoles('user', 'admin'), as
 });
 
 // DELETE delete project
-router.delete('/:projectId', authenticateToken, authorizeRoles('user', 'admin'), async (req, res) => {
+router.delete('/:projectId', isLoggedIn, async (req, res) => {
   try {
-    const project = await Project.findByPk(req.params.projectId);
-    if (!project) {
-      return res.status(404).json({ message: 'Project not found' });
-    }
-    await project.destroy();
+    await deleteProject(req.params.projectId);
     res.json({ message: 'Project deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });

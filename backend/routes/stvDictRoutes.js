@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const StvDict = require('../models/StvDict');
-const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
+const { getAllItems, getItemById, createItem } = require('../services/stvDictService');
+const { isAdmin } = require('../middlewares/authMiddleware');
 
 // GET all items in the StvDict
 router.get('/stvDict', async (req, res) => {
   try {
-    const items = await StvDict.findAll();
+    const items = await getAllItems();
     res.json(items);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -14,9 +14,9 @@ router.get('/stvDict', async (req, res) => {
 });
 
 // POST create a new item in the StvDict
-router.post('/stvDict', authenticateToken, authorizeRoles('admin'), async (req, res) => {
+router.post('/stvDict', isAdmin, async (req, res) => {
   try {
-    const item = await StvDict.create(req.body);
+    const item = await createItem(req.body);
     res.status(201).json(item);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -26,10 +26,7 @@ router.post('/stvDict', authenticateToken, authorizeRoles('admin'), async (req, 
 // GET item in the StvDict by ID
 router.get('/stvDict/:id', async (req, res) => {
   try {
-    const item = await StvDict.findByPk(req.params.id);
-    if (!item) {
-      return res.status(404).json({ message: 'Item not found' });
-    }
+    const item = await getItemById(req.params.id);
     res.json(item);
   } catch (error) {
     res.status(500).json({ message: error.message });

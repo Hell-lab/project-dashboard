@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const RoleDict = require('../models/RoleDict');
-const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
+const { getAllRoles, getRoleById, createRole } = require('../services/roleDictService');
+const { isAdmin } = require('../middlewares/authMiddleware');
 
 // GET all roles
 router.get('/roles', async (req, res) => {
   try {
-    const roles = await RoleDict.findAll();
+    const roles = await getAllRoles();
     res.json(roles);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -14,9 +14,9 @@ router.get('/roles', async (req, res) => {
 });
 
 // POST create a new role
-router.post('/roles', authenticateToken, authorizeRoles('admin'), async (req, res) => {
+router.post('/roles', isAdmin, async (req, res) => {
   try {
-    const role = await RoleDict.create(req.body);
+    const role = await createRole(req.body);
     res.status(201).json(role);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -26,10 +26,7 @@ router.post('/roles', authenticateToken, authorizeRoles('admin'), async (req, re
 // GET role by ID
 router.get('/roles/:roleId', async (req, res) => {
   try {
-    const role = await RoleDict.findByPk(req.params.roleId);
-    if (!role) {
-      return res.status(404).json({ message: 'Role not found' });
-    }
+    const role = await getRoleById(req.params.roleId);
     res.json(role);
   } catch (error) {
     res.status(500).json({ message: error.message });

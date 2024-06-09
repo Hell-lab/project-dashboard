@@ -1,23 +1,25 @@
 // backend/middlewares/authMiddleware.js
 const jwt = require('jsonwebtoken');
 
-const authenticateToken = (req, res, next) => {
-  const token = req.headers['authorization'];
-  if (!token) return res.sendStatus(401);
+// Middleware to check if user is logged in
+function isLoggedIn(req, res, next) {
+  if (!req.jwtProvided) {
+    console.log("Denied: Authentication required");
+    return res.status(401).send('Authentication required');
+  } else if (req.jwtVerifyError || req.jwtExpired) {
+    console.log("Denied: Invalid authentication token");
+    return res.status(401).send('Invalid authentication token');
+  }
+  next();
+}
 
-  jwt.verify(token, 'your_jwt_secret_key', (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
+function isAdmin(req, res, next) {
+  if (req.jwtPayload && req.jwtPayload.userIsAdmin) {
     next();
-  });
-};
+  } else {
+    console.log("Denied: Admin privileges required");
+    res.status(403).send('Admin privileges required');
+  }
+}
 
-const authorizeRoles = (...roles) => {
-  return (req, res, next) => {
-    if (!req.user) return res.sendStatus(401); // Ensure user is authenticated
-    if (!roles.includes(req.user.role)) return res.sendStatus(403); // Check if the user's role is authorized
-    next();
-  };
-};
-
-module.exports = { authenticateToken, authorizeRoles };
+module.exports = { isLoggedIn, isAdmin };

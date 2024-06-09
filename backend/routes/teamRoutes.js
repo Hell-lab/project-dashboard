@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const Team = require('../models/Team');
-const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
+const { getAllTeamMembers, addTeamMember, removeTeamMember } = require('../services/teamService');
+const { isLoggedIn } = require('../middlewares/authMiddleware');
 
 // GET all team members of a project
 router.get('/projects/:projectId/team', async (req, res) => {
   try {
-    const teamMembers = await Team.findAll({ where: { projectId: req.params.projectId } });
+    const teamMembers = await getAllTeamMembers(req.params.projectId);
     res.json(teamMembers);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -14,15 +14,11 @@ router.get('/projects/:projectId/team', async (req, res) => {
 });
 
 // POST add new team member to a project
-router.post('/projects/:projectId/team', authenticateToken, authorizeRoles('user', 'admin'), async (req, res) => {
+router.post('/projects/:projectId/team', isLoggedIn, async (req, res) => {
   try {
     const { projectId } = req.params;
     const { userId } = req.body;
-    const existingMember = await Team.findOne({ where: { projectId, userId } });
-    if (existingMember) {
-      return res.status(400).json({ message: 'Team member already exists' });
-    }
-    const teamMember = await Team.create({ projectId, userId });
+    const teamMember = await addTeamMember(projectId, userId);
     res.status(201).json(teamMember);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -30,14 +26,10 @@ router.post('/projects/:projectId/team', authenticateToken, authorizeRoles('user
 });
 
 // DELETE remove a team member from a project
-router.delete('/projects/:projectId/team/:userId', authenticateToken, authorizeRoles('user', 'admin'), async (req, res) => {
+router.delete('/projects/:projectId/team/:userId', isLoggedIn, async (req, res) => {
   try {
     const { projectId, userId } = req.params;
-    const teamMember = await Team.findOne({ where: { projectId, userId } });
-    if (!teamMember) {
-      return res.status(404).json({ message: 'Team member not found' });
-    }
-    await teamMember.destroy();
+    await removeTeamMember(projectId, userId);
     res.json({ message: 'Team member removed successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
