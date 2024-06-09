@@ -8,6 +8,7 @@ var logger = require('morgan');
 const WebSocket = require('ws');
 
 var jwt = require('jsonwebtoken');
+
 const jwtSecret = process.env.JWT_SECRET;
 if (!jwtSecret) {
     console.error('FATAL ERROR: JWT_SECRET env var is not defined.');
