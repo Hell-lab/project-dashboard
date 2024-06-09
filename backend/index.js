@@ -1,8 +1,11 @@
+require('dotenv').config();
+
 const express = require('express');
+
 var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-const WebSocket = require('ws');
+//var cookieParser = require('cookie-parser');
+//var logger = require('morgan');
+//const WebSocket = require('ws');
 
 var jwt = require('jsonwebtoken');
 const jwtSecret = process.env.JWT_SECRET;
@@ -12,7 +15,7 @@ if (!jwtSecret) {
 }
 
 const cors = require('cors');
-const { connectDB, syncDB } = require('.config/database');
+const { connectDB, syncDB } = require('./config/database');
 
 const userRoutes = require('./routes/userRoutes');
 const teamRoutes = require('./routes/teamRoutes');
@@ -27,10 +30,10 @@ const categoryDictRoutes = require('./routes/categoryDictRoutes');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(logger('dev'));
+//app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+//app.use(express.urlencoded({ extended: false }));
+//app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
