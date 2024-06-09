@@ -1,7 +1,6 @@
 const { sequelize } = require('../config/database');
 const { DataTypes } = require('sequelize');
 
-
 const User = sequelize.define('User', {
   id: {
     type: DataTypes.INTEGER,
@@ -23,7 +22,7 @@ const User = sequelize.define('User', {
   },
   hashedPassword: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true, // if null: user cannot login (e.g. former StV members)
   },
   roleDictId: {
     type: DataTypes.INTEGER,
@@ -35,6 +34,7 @@ const User = sequelize.define('User', {
   },
 }, {
   tableName: 'user',
+  timestamps: false,
 });
 
 module.exports = User;

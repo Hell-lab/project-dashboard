@@ -13,6 +13,7 @@ const Glossary = sequelize.define('Glossary', {
   },
 }, {
   tableName: 'glossary',
+  timestamps: false,
 });
 
 module.exports = Glossary;

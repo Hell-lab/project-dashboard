@@ -17,13 +17,15 @@ const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
+
+    require('../models');
+
+    await sequelize.sync({ alter: true }); // force: true will drop the table if it already exists; alter: true will change table to match models
+    console.log('All models were synchronized successfully.');
+
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }
 };
 
-async function syncDB() {
- // TODO
-}
-
-module.exports = { sequelize, connectDB, syncDB };
+module.exports = { sequelize, connectDB };

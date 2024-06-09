@@ -14,6 +14,7 @@ const MilestoneDict = sequelize.define('MilestoneDict', {
   },
 }, {
   tableName: 'milestone_dict',
+  timestamps: false,
 });
 
 module.exports = MilestoneDict;

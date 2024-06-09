@@ -14,6 +14,7 @@ const RoleDict = sequelize.define('RoleDict', {
   },
 }, {
   tableName: 'role_dict',
+  timestamps: false,
 });
 
 module.exports = RoleDict;

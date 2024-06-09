@@ -14,6 +14,7 @@ const CategoryDict = sequelize.define('CategoryDict', {
   },
 }, {
   tableName: 'category_dict',
+  timestamps: false,
 });
 
 module.exports = CategoryDict;
