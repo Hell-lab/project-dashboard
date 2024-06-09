@@ -1,33 +1,25 @@
 <template>
   <v-app>
+    <v-app-bar app color="white" elevate-on-scroll>
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-toolbar-title>
+        <img src="./assets/oeh_logo.png" alt="Logo" height="60" />
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon>mdi-login</v-icon>
+      </v-btn>
+    </v-app-bar>
+
+    <v-row class="blue-bar">
+      <v-col>
+        <h1 class="display-2 font-weight-bold">Dashboard</h1>
+      </v-col>
+    </v-row>
+    
     <v-main>
       <v-container>
-        <v-row>
-          <v-col>
-            <h2>StV Project Dashboard</h2>
-            <v-card>
-              <v-card-title>Login</v-card-title>
-              <v-card-text>
-                <v-form @submit.prevent="login">
-                  <v-text-field
-                    v-model="loginForm.username"
-                    label="Username"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="loginForm.password"
-                    label="Password"
-                    type="password"
-                    required
-                  ></v-text-field>
-                  <v-btn type="submit">Login</v-btn>
-                </v-form>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-
-        <v-row>
+         <v-row>
           <v-col>
             <v-btn
               class="mt-4"
@@ -35,7 +27,7 @@
               @click="toggleAddProjectSection"
             >
               Add New Project
-              <v-icon right>{{ showAddProjectSection ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+              <!--<v-icon right>{{ showAddProjectSection ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>-->
             </v-btn>
 
             <v-card v-if="showAddProjectSection">
@@ -158,6 +150,8 @@ export default {
     }
   }
 };
+
+
 </script>
 
 
@@ -169,4 +163,39 @@ export default {
 /* Your custom styles */
 body
   font-family: 'Roboto', sans-serif
+
+  .v-application
+    background-color: #ffffff !important
+
+  .blue-bar
+      background-color: #1565c0
+      color: #1565c0
+      padding: 20px 0 /* Adjust padding as needed */
+      display: flex
+      align-items: center
+  
+  .blue-bar h1
+    margin: 0
+    color: #ffffff
+    font-size: 5rem
+    margin-left: 50px
+  
+  h1
+    color: #000000
+
+  .v-app-bar
+    background-color: #ffffff !important
+    border-bottom: 1px solid #ccc
+
+  .v-btn--icon
+    color: #f5a623
+  
+  .v-simple-table th 
+    font-weight: bold
+  
+  
+  .v-simple-table td
+    border: 10px solid #ccc
+  .v-simple-table th 
+    border: 10px solid #ccc
 </style>
