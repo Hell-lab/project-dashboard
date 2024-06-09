@@ -15,6 +15,7 @@ const Team = sequelize.define('Team', {
   },
 }, {
   tableName: 'team',
+  timestamps: false,
 });
 
 module.exports = Team;

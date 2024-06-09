@@ -1,4 +1,5 @@
 const sequelize = require('../config/database');
+const User = require('./User');
 const Project = require('./Project');
 const Status = require('./Status');
 const Team = require('./Team');
@@ -15,14 +16,8 @@ Status.belongsTo(MilestoneDict, { foreignKey: 'milestoneDictId' });
 Team.belongsTo(Project, { foreignKey: 'projectId' });
 Team.belongsTo(User, { foreignKey: 'userId' });
 
-// Sync all models with the database
-const syncDB = async () => {
-  await sequelize.sync({ alter: true });
-};
-
 module.exports = {
-  sequelize,
-  syncDB,
+  User,
   Project,
   Status,
   Team,

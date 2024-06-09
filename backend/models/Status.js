@@ -26,6 +26,7 @@ const Status = sequelize.define('Status', {
   },
 }, {
   tableName: 'status',
+  timestamps: false,
 });
 
 module.exports = Status;

@@ -14,6 +14,7 @@ const StvDict = sequelize.define('StvDict', {
   },
 }, {
   tableName: 'stv_dict',
+  timestamps: false,
 });
 
 module.exports = StvDict;

@@ -15,7 +15,7 @@ if (!jwtSecret) {
 }
 
 const cors = require('cors');
-const { connectDB, syncDB } = require('./config/database');
+const { connectDB } = require('./config/database');
 
 const userRoutes = require('./routes/userRoutes');
 const teamRoutes = require('./routes/teamRoutes');
@@ -90,7 +90,7 @@ next()
 // The order of our middlewares matters: If we put this before
 // setting up our express.static middleware, JWT would even be checked
 // for every static resource, which would introduce unnecessary overhead.
-app.use(verifyMiddleware);
+//app.use(verifyMiddleware);
 
 app.use('/api/users', userRoutes);
 app.use('/api/team', teamRoutes);
@@ -106,7 +106,6 @@ app.use('/api/categoryDict', categoryDictRoutes);
 const startServer = async () => {
   try {
     await connectDB();
-    await syncDB();
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
