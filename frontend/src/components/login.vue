@@ -2,8 +2,8 @@
   <div>
     <h1>Login</h1>
     <form @submit.prevent="login">
-      <label for="email">Email:</label><br>
-      <input type="email" id="email" v-model="email"><br>
+      <label for="name">Name:</label><br>
+      <input type="name" id="name" v-model="name"><br>
       <label for="password">Password:</label><br>
       <input type="password" id="password" v-model="password"><br><br>
       <button type="submit">Login</button>
@@ -17,14 +17,14 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      email: '',
+      name: '',
       password: ''
     };
   },
   methods: {
     login() {
-      const url = 'http://localhost:3000/api/login'; // TODO: Adjust URL
-      axios.post(url, { username: this.email, password: this.password })
+      const url = 'http://localhost:3000/login'; // TODO: Adjust URL
+      axios.post(url, { username: this.name, password: this.password })
         .then(response => {
           const { token } = response.data;
           localStorage.setItem('token', token);
