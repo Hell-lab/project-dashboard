@@ -1,4 +1,7 @@
+require('dotenv').config();
+
 const express = require('express');
+
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -12,7 +15,7 @@ if (!jwtSecret) {
 }
 
 const cors = require('cors');
-const { connectDB, syncDB } = require('.config/database');
+const { connectDB, syncDB } = require('./config/database');
 
 const userRoutes = require('./routes/userRoutes');
 const teamRoutes = require('./routes/teamRoutes');
