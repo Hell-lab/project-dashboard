@@ -82,24 +82,4 @@ router.post('/sort', async (req, res) => {
   }
 });
 
-// login endpoint
-router.post('/login', async function(req, res) {
-  const { mail, pw } = req.body;
-  if (!mail || !pw) {
-      return res.status(400).send({ status: 'fail', message: 'Missing email or password' });
-  }
-
-  try {
-      const user = await db.user.findUserByEmail(mail);
-      if (user && await bcrypt.compare(pw, user.pw)) {
-          const token = jwt.sign({ userMail: user.mail, userIsAdmin: user.mail.toLowerCase().startsWith('admin') }, jwtSecret, { expiresIn: '1h' });
-          res.send({ status: 'success', message: 'Login successful', token: token, expiresAt: Date.now() + 3600000});
-      } else {
-          res.status(401).send({ status: 'fail', message: 'Invalid credentials' });
-      }
-  } catch (error) {
-      res.status(500).send({ status: 'fail', message: 'Server error' });
-  }
-});
-
 module.exports = router;

@@ -24,4 +24,8 @@ const sortUsers = async (orderCriteria) => {
   return await User.findAll({ order: orderCriteria });
 };
 
-module.exports = { addUser, deleteUser, modifyUser, findAllUsers, filterUsers, sortUsers };
+const findUserByUsername = async (username) => {
+  return await User.findOne({ where: { username: username } });
+};
+
+module.exports = { addUser, deleteUser, modifyUser, findAllUsers, filterUsers, sortUsers, findUserByUsername };

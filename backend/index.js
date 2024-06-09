@@ -18,6 +18,7 @@ if (!jwtSecret) {
 const cors = require('cors');
 const { connectDB } = require('./config/database');
 
+const loginRoutes = require('./routes/loginRoutes');
 const userRoutes = require('./routes/userRoutes');
 const teamRoutes = require('./routes/teamRoutes');
 const stvDictRoutes = require('./routes/stvDictRoutes');
@@ -86,6 +87,8 @@ if(!req.jwtProvided) {
 }
 next()
 }
+
+app.use('/login', loginRoutes);
 
 // Apply the verifyMiddleware middleware to all routes
 // The order of our middlewares matters: If we put this before
