@@ -2,19 +2,22 @@
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
-  background-color: #f5f5f5; /* Light grey background similar to the OEH JKU site */
+  background-color: #f5f5f5;
+  /* Light grey background similar to the OEH JKU site */
 }
 
 /* Dashboard styles */
 #dashboard {
   padding: 20px;
-  background-color: #ffffff; /* White background for the dashboard */
+  background-color: #ffffff;
+  /* White background for the dashboard */
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
-  color: #004d99; /* Dark blue color for headings */
+  color: #004d99;
+  /* Dark blue color for headings */
 }
 
 form {
@@ -24,10 +27,14 @@ form {
 label {
   display: block;
   margin-bottom: 5px;
-  color: #333333; /* Dark grey for form labels */
+  color: #333333;
+  /* Dark grey for form labels */
 }
 
-input[type="text"], input[type="password"], textarea, select {
+input[type="text"],
+input[type="password"],
+textarea,
+select {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
@@ -37,7 +44,8 @@ input[type="text"], input[type="password"], textarea, select {
 }
 
 button {
-  background-color: #004d99; /* Dark blue background for buttons */
+  background-color: #004d99;
+  /* Dark blue background for buttons */
   color: white;
   padding: 10px 20px;
   border: none;
@@ -46,7 +54,8 @@ button {
 }
 
 button:hover {
-  background-color: #003366; /* Darker blue on hover */
+  background-color: #003366;
+  /* Darker blue on hover */
 }
 
 /* Table styles */
@@ -56,7 +65,8 @@ table {
   margin-bottom: 20px;
 }
 
-th, td {
+th,
+td {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #dddddd;

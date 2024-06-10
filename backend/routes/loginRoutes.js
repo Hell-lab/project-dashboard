@@ -7,7 +7,7 @@ var jwt = require('jsonwebtoken');
 const jwtSecret = process.env.JWT_SECRET;
 
 // login endpoint
-router.post('/', async function(req, res) {
+router.post('/', async function (req, res) {
     const { username, pw } = req.body;
     if (!username || !pw) {
         return res.status(400).send({ status: 'fail', message: 'Missing username or password' });
@@ -25,5 +25,5 @@ router.post('/', async function(req, res) {
         console.error(error);
         res.status(500).send({ status: 'fail', message: 'Server error' });
     }
-  });
-  module.exports = router;
+});
+module.exports = router;

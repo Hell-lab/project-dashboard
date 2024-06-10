@@ -10,21 +10,21 @@ const modifyProject = async (projectId, projectData) => {
 };
 
 const deleteProject = async (projectId) => {
-    const project = await Project.findByPk(projectId);
-    if (!project) throw new Error('Project not found');
-    await project.destroy();
-    return project;
-  };
+  const project = await Project.findByPk(projectId);
+  if (!project) throw new Error('Project not found');
+  await project.destroy();
+  return project;
+};
 
 const findAllProjects = async () => {
   return await Project.findAll();
 };
 
 const getProjectById = async (projectId) => {
-    const project = await Project.findByPk(projectId);
-    if (!project) throw new Error('Project not found');
-    return project;
-  };
+  const project = await Project.findByPk(projectId);
+  if (!project) throw new Error('Project not found');
+  return project;
+};
 
 const filterProjects = async (criteria) => {
   return await Project.findAll({ where: criteria });

@@ -1,12 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <v-btn 
-        class="mt-4"
-        color="primary"
-        @click="toggleAddProjectSection"
-        v-if="showAddproject"
-      >
+      <v-btn class="mt-4" color="primary" @click="toggleAddProjectSection" v-if="showAddproject">
         Add New Project
       </v-btn>
 
@@ -14,37 +9,16 @@
         <v-card-title>Add New Project</v-card-title>
         <v-card-text>
           <v-form @submit.prevent="addProject">
-            <v-text-field
-              v-model="newProject.name"
-              label="Name"
-              required
-            ></v-text-field>
-            <v-textarea
-              v-model="newProject.description"
-              label="Description"
-              required
-            ></v-textarea>
-            <v-select
-              v-model="newProject.categories"
-              :items="categoryItems"
-              item-title="name"
-              item-value="id"
-              label="Category"
-              required
-            ></v-select>
-            <v-select
-              v-model="newProject.team"
-              :items="teamMembers"
-              item-title="displayName"
-              item-value="userId"
-              label="Team"
-              multiple
-              required
-            ></v-select>
+            <v-text-field v-model="newProject.name" label="Name" required></v-text-field>
+            <v-textarea v-model="newProject.description" label="Description" required></v-textarea>
+            <v-select v-model="newProject.categories" :items="categoryItems" item-title="name" item-value="id"
+              label="Category" required></v-select>
+            <v-select v-model="newProject.team" :items="teamMembers" item-title="displayName" item-value="userId"
+              label="Team" multiple required></v-select>
             <v-btn type="submit" color="primary">Add Project</v-btn>
           </v-form>
         </v-card-text>
-       </v-card> 
+      </v-card>
     </v-col>
   </v-row>
 
@@ -71,7 +45,8 @@
             <td>{{ project.lastUpdated }}</td>
             <td>
               <span v-for="(user, index) in project.team.slice(0, 2)" :key="index">
-                <router-link v-if="user && user.userId" :to="`/users/${user.userId}`">{{ user.displayName }}</router-link>
+                <router-link v-if="user && user.userId" :to="`/users/${user.userId}`">{{ user.displayName
+                  }}</router-link>
                 <template v-if="index < 1 && project.team.length > 1">, </template>
               </span>
               <template v-if="project.team.length > 2"> et al.</template>
@@ -126,7 +101,7 @@ export default {
           const statusResponse = await axios.get(`${apiBaseUrl}/api/statuses/project/${project.id}`);
           const sortedStatuses = statusResponse.data.sort((a, b) => new Date(b.since) - new Date(a.since));
           const latestStatus = sortedStatuses[0];
-          
+
           const milestoneResponse = await axios.get(`${apiBaseUrl}/api/milestones/${latestStatus.milestoneDictId}`);
           const lastUpdate = new Date(latestStatus.since);
           const today = new Date();
@@ -187,36 +162,39 @@ export default {
       const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
       const token = localStorage.getItem('token');
       var createdProject;
-      const newProjectToSend = {name: this.newProject.name, description: this.newProject.description, categoryDictId: this.categoryItems[this.newProject.categories-1].id }
+      const newProjectToSend = { name: this.newProject.name, description: this.newProject.description, categoryDictId: this.categoryItems[this.newProject.categories - 1].id }
 
       try {
         createdProject = await axios.post(`${apiBaseUrl}/api/projects`, newProjectToSend, {
-            headers: { 'authorization': `Bearer ${token}` }});
+          headers: { 'authorization': `Bearer ${token}` }
+        });
         this.showAddProjectSection = false;
       } catch (error) {
         console.error('There was an error adding the project!', error);
       }
-      const newProjectId= createdProject.data.id;
+      const newProjectId = createdProject.data.id;
       try {
-        this.newStatus = {projectId: newProjectId, description: 'Project created.', milestoneDictId: 1};  
+        this.newStatus = { projectId: newProjectId, description: 'Project created.', milestoneDictId: 1 };
         await axios.post(`${apiBaseUrl}/api/statuses`, this.newStatus, {
-            headers: { 'authorization': `Bearer ${token}` }}); 
+          headers: { 'authorization': `Bearer ${token}` }
+        });
       } catch (error) {
         console.error('There was an error adding the status!', error);
       }
 
-      for(let i = 0; i < this.newProject.team.length; i++) {
+      for (let i = 0; i < this.newProject.team.length; i++) {
         try {
-        this.newTeam = {userId: this.teamMembers[this.newProject.team[i]-1].userId};  
-        await axios.post(`${apiBaseUrl}/api/projects/${newProjectId}/team`, this.newTeam, {
-            headers: { 'authorization': `Bearer ${token}` }});
+          this.newTeam = { userId: this.teamMembers[this.newProject.team[i] - 1].userId };
+          await axios.post(`${apiBaseUrl}/api/projects/${newProjectId}/team`, this.newTeam, {
+            headers: { 'authorization': `Bearer ${token}` }
+          });
         } catch (error) {
-            console.error('There was an error adding the team!', error);
+          console.error('There was an error adding the team!', error);
         }
       }
       // Clear fields and refresh the list of projects after adding a new one 
-      this.newProject = {name: '', description: '', categoryDictId: '', team:''};
-      this.fetchProjects();      
+      this.newProject = { name: '', description: '', categoryDictId: '', team: '' };
+      this.fetchProjects();
     },
     setupWebSocket() {
       this.ws = new WebSocket('ws://localhost:3000');

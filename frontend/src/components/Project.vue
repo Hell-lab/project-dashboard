@@ -3,7 +3,7 @@
     <h1>{{ project.name }}</h1>
     <p><strong>Category:</strong> {{ category.name }}</p>
     <p>{{ project.description }}</p>
-    
+
     <h2>Team Members</h2>
     <ul>
       <li v-for="member in teamMembers" :key="member.userId" class="member-item">
@@ -31,21 +31,11 @@
       </tbody>
     </v-table>
   </div>
-  <v-btn 
-    class="mt-4"
-    color="primary"
-    @click="toggleAddStatusSection"
-    v-if="showAddStatus"
-  >
+  <v-btn class="mt-4" color="primary" @click="toggleAddStatusSection" v-if="showAddStatus">
     Update Status
   </v-btn>
 
-  <v-btn 
-    class="mt-4"
-    color="primary"
-    @click="deleteCurrentProject"
-    v-if="showDeleteProject"
-  >
+  <v-btn class="mt-4" color="primary" @click="deleteCurrentProject" v-if="showDeleteProject">
     Delete Project
   </v-btn>
 
@@ -53,23 +43,13 @@
     <v-card-title>Add new Status Update</v-card-title>
     <v-card-text>
       <v-form @submit.prevent="addStatus">
-        <v-textarea
-          v-model="newStatus.description"
-          label="Description"
-          required
-        ></v-textarea>
-        <v-select
-          v-model="newStatus.milestoneDictId"
-          :items="milestoneItems"
-          item-title="name"
-          item-value="id"
-          label="Milestone"
-          required
-        ></v-select>
+        <v-textarea v-model="newStatus.description" label="Description" required></v-textarea>
+        <v-select v-model="newStatus.milestoneDictId" :items="milestoneItems" item-title="name" item-value="id"
+          label="Milestone" required></v-select>
         <v-btn type="submit" color="primary">Update Status</v-btn>
       </v-form>
     </v-card-text>
-    </v-card> 
+  </v-card>
 </template>
 
 <script>
@@ -94,7 +74,7 @@ export default {
   },
   async created() {
     const projectId = this.$route.params.projectId;
-    const apiBaseUrl = process.env.VUE_APP_API_BASE_URL  || 'http://localhost:3000';
+    const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
 
     this.fetchMilestones();
 
@@ -105,38 +85,38 @@ export default {
       this.showAddStatusSection = !this.showAddStatusSection;
     },
 
-    async fetchStatuses(){
+    async fetchStatuses() {
       const projectId = this.$route.params.projectId;
-      const apiBaseUrl = process.env.VUE_APP_API_BASE_URL  || 'http://localhost:3000';
+      const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
 
       try {
-      // Fetch general project information
-      const projectResponse = await axios.get(`${apiBaseUrl}/api/projects/${projectId}`);
-      this.project = projectResponse.data;
+        // Fetch general project information
+        const projectResponse = await axios.get(`${apiBaseUrl}/api/projects/${projectId}`);
+        this.project = projectResponse.data;
 
-      // Fetch category
-      const categoryResponse = await axios.get(`${apiBaseUrl}/api/categories/${this.project.categoryDictId}`);
-      this.category = categoryResponse.data;
+        // Fetch category
+        const categoryResponse = await axios.get(`${apiBaseUrl}/api/categories/${this.project.categoryDictId}`);
+        this.category = categoryResponse.data;
 
-      // Fetch team members
-      const teamResponse = await axios.get(`${apiBaseUrl}/api/projects/${projectId}/team`);
-      this.teamMembers = teamResponse.data;
+        // Fetch team members
+        const teamResponse = await axios.get(`${apiBaseUrl}/api/projects/${projectId}/team`);
+        this.teamMembers = teamResponse.data;
 
-      // Fetch statuses and their associated milestones
-      const statusesResponse = await axios.get(`${apiBaseUrl}/api/statuses/project/${projectId}`);
-      const statuses = statusesResponse.data;
+        // Fetch statuses and their associated milestones
+        const statusesResponse = await axios.get(`${apiBaseUrl}/api/statuses/project/${projectId}`);
+        const statuses = statusesResponse.data;
 
-      // Fetch milestones for each status
-      for (let status of statuses) {
-        const milestoneResponse = await axios.get(`${apiBaseUrl}/api/milestones/${status.milestoneDictId}`);
-        status.milestoneName = milestoneResponse.data.name;
-        status.milestoneDescription = milestoneResponse.data.description;
+        // Fetch milestones for each status
+        for (let status of statuses) {
+          const milestoneResponse = await axios.get(`${apiBaseUrl}/api/milestones/${status.milestoneDictId}`);
+          status.milestoneName = milestoneResponse.data.name;
+          status.milestoneDescription = milestoneResponse.data.description;
+        }
+
+        this.statuses = statuses.sort((a, b) => new Date(b.since) - new Date(a.since));
+      } catch (error) {
+        console.error('Error fetching project details:', error);
       }
-
-      this.statuses = statuses.sort((a, b) => new Date(b.since) - new Date(a.since));
-    } catch (error) {
-      console.error('Error fetching project details:', error);
-    }
     },
 
     async fetchMilestones() {
@@ -153,23 +133,24 @@ export default {
       }
     },
 
-    async addStatus(){
+    async addStatus() {
       const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
       const token = localStorage.getItem('token');
 
       try {
-        this.newStatus = {projectId: this.project.id, description: this.newStatus.description, milestoneDictId: this.newStatus.milestoneDictId};  
+        this.newStatus = { projectId: this.project.id, description: this.newStatus.description, milestoneDictId: this.newStatus.milestoneDictId };
         await axios.post(`${apiBaseUrl}/api/statuses`, this.newStatus, {
-            headers: { 'authorization': `Bearer ${token}` }}); 
+          headers: { 'authorization': `Bearer ${token}` }
+        });
       } catch (error) {
         console.error('There was an error adding the status!', error);
       }
       this.newStatus = { milestoneDictId: '', description: '' },
-      this.fetchStatuses(); 
+        this.fetchStatuses();
       this.toggleAddStatusSection();
     },
 
-    async deleteCurrentProject(){
+    async deleteCurrentProject() {
       const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
       const token = localStorage.getItem('token');
 
@@ -182,8 +163,8 @@ export default {
         });
 
         await axios.delete(`${apiBaseUrl}/api/projects/${this.project.id}`, {
-            headers: { 'authorization': `Bearer ${token}` }
-        }); 
+          headers: { 'authorization': `Bearer ${token}` }
+        });
         alert('Project deleted.');
         this.$router.push('/');
 

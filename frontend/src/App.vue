@@ -6,34 +6,31 @@
         <img src="./assets/oeh_logo.png" alt="Logo" height="60" />
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        class="login-btn"
-        @click="isLoggedIn ? logout() : goToLogin()"
-      >
-      {{ isLoggedIn ? 'Logout' : 'Login' }}
+      <v-btn class="login-btn" @click="isLoggedIn ? logout() : goToLogin()">
+        {{ isLoggedIn ? 'Logout' : 'Login' }}
       </v-btn>
     </v-app-bar>
 
     <button @click="goHome">
       <div class="blue-bar">
-      <v-col>
-        <h1 class="display-2 font-weight-bold">Dashboard</h1>
-      </v-col>
-    </div>
+        <v-col>
+          <h1 class="display-2 font-weight-bold">Dashboard</h1>
+        </v-col>
+      </div>
     </button>
-    
+
     <v-main class="main-content">
-        <router-view @login-success="handleLoginSuccess"></router-view>
+      <router-view @login-success="handleLoginSuccess"></router-view>
     </v-main>
-    <v-footer >
+    <v-footer>
       <div class="blue-bar-footer">
-        <v-col >
-         <h1 class="display-2 font-weight-bold">2024 — Felix Ferchhumer & Helena Fitze</h1><
-      </v-col>
+        <v-col>
+          <h1 class="display-2 font-weight-bold">2024 — Felix Ferchhumer & Helena Fitze</h1>
+          < </v-col>
       </div>
     </v-footer>
   </v-app>
-  
+
 </template>
 
 <script>

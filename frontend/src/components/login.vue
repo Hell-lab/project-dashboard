@@ -27,7 +27,7 @@ export default {
     login() {
       const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
 
-      const url = `${apiBaseUrl}/login`; 
+      const url = `${apiBaseUrl}/login`;
       axios.post(url, { username: this.username, pw: this.password })
         .then(response => {
           const { token } = response.data;
@@ -40,7 +40,7 @@ export default {
           console.error('Error:', error);
           this.errorMessage = 'Login failed. Please check your credentials.';
           console.error('Server response:', error.response.data);
-        });      
+        });
     }
   }
 };

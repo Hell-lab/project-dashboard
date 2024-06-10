@@ -90,7 +90,7 @@ router.delete('/project/:projectId', isAdmin, async (req, res) => {
         projectId: req.params.projectId,
       }
     });
-    
+
     await statuses.forEach(status => {
       console.log("Deleting status: " + status.id)
       status.destroy()

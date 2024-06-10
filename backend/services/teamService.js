@@ -61,7 +61,7 @@ const removeTeamMember = async (projectId, userId) => {
 
 const removeAllTeamMembers = async (projectId) => {
   const teams = await Team.findAll({ where: { projectId: projectId } });
-  
+
   teams.forEach(team => team.destroy());
   return teams;
 };
