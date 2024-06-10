@@ -43,15 +43,15 @@ const createTeam = async (projectId, ...userIds) => {
 
 
 const addTeamMember = async (projectId, userId) => {
-  const existingMember = await Team.findOne({ where: { PROJECTID: projectId, USERID: userId } });
+  const existingMember = await Team.findOne({ where: { projectId: projectId, userId: userId } });
   if (existingMember) {
     throw new Error('Team member already exists');
   }
-  return await Team.create({ PROJECTID: projectId, USERID: userId });
+  return await Team.create({ projectId: projectId, userId: userId });
 };
 
 const removeTeamMember = async (projectId, userId) => {
-  const teamMember = await Team.findOne({ where: { PROJECTID: projectId, USERID: userId } });
+  const teamMember = await Team.findOne({ where: { projectId: projectId, userId: userId } });
   if (!teamMember) {
     throw new Error('Team member not found');
   }

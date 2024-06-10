@@ -1,7 +1,13 @@
 const Project = require('../models/Project');
 
 const addProject = async (projectData) => {
-  return await Project.create(projectData);
+  console.log(projectData);
+  const createdProject = await Project.create(projectData);
+  console.log("Project created successfully:", createdProject);
+    // Access fields of the created project
+  console.log("Project ID:", createdProject.id);
+  console.log("Project Name:", createdProject.name);
+  return createdProject;
 };
 
 const modifyProject = async (projectId, projectData) => {
