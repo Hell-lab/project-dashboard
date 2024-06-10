@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { addProject, findAllProjects, getProjectById, deleteProject, modifyProject } = require('../services/projectService');
+const { getAllTeamMembers, addTeamMember, removeTeamMember } = require('../services/teamService');
 const { isLoggedIn } = require('../middlewares/authMiddleware');
 
 // GET all projects
@@ -48,6 +49,39 @@ router.delete('/:projectId', isLoggedIn, async (req, res) => {
   try {
     await deleteProject(req.params.projectId);
     res.json({ message: 'Project deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// GET all team members of a project
+router.get('/:projectId/team', async (req, res) => {
+  try {
+    const teamMembers = await getAllTeamMembers(req.params.projectId);
+    res.json(teamMembers);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// POST add new team member to a project
+router.post('/:projectId/team', isLoggedIn, async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { userId } = req.body;
+    const teamMember = await addTeamMember(projectId, userId);
+    res.status(201).json(teamMember);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// DELETE remove a team member from a project
+router.delete('/:projectId/team/:userId', isLoggedIn, async (req, res) => {
+  try {
+    const { projectId, userId } = req.params;
+    await removeTeamMember(projectId, userId);
+    res.json({ message: 'Team member removed successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

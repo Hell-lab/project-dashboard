@@ -20,7 +20,6 @@ const { connectDB } = require('./config/database');
 
 const loginRoutes = require('./routes/loginRoutes');
 const userRoutes = require('./routes/userRoutes');
-const teamRoutes = require('./routes/teamRoutes');
 const stvDictRoutes = require('./routes/stvDictRoutes');
 const statusRoutes = require('./routes/statusRoutes');
 const roleDictRoutes = require('./routes/roleDictRoutes');
@@ -97,11 +96,10 @@ app.use('/login', loginRoutes);
 //app.use(verifyMiddleware);
 
 app.use('/api/users', userRoutes);
-app.use('/api/team', teamRoutes);
 app.use('/api/stvDict', stvDictRoutes);
-app.use('/api/status', statusRoutes);
+app.use('/api/statuses', statusRoutes);
 app.use('/api/roleDict', roleDictRoutes);
-app.use('/api/project', projectRoutes);
+app.use('/api/projects', projectRoutes);
 app.use('/api/milestoneDict', milestoneDictRoutes);
 app.use('/api/glossary', glossaryRoutes);
 app.use('/api/categoryDict', categoryDictRoutes);
