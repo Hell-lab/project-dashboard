@@ -48,7 +48,6 @@ router.get('/project/:projectId', async (req, res) => {
 router.post('/', isLoggedIn, async (req, res) => {
   try {
     const status = await Status.create(req.body);
-    notifyClients({ type: 'project-updated', status });
     res.status(201).json(status);
   } catch (error) {
     res.status(400).json({ message: error.message });

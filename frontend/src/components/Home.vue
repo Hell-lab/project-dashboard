@@ -68,7 +68,7 @@
             <td>{{ project.description }}</td>
             <td>{{ project.category }}</td>
             <td>{{ project.milestone }}</td>
-            <td>{{ project.lastUpdate }}</td>
+            <td>{{ project.lastUpdated }}</td>
             <td>
               <span v-for="(user, index) in project.team.slice(0, 2)" :key="index">
                 <router-link v-if="user && user.userId" :to="`/users/${user.userId}`">{{ user.displayName }}</router-link>
@@ -146,9 +146,13 @@ export default {
               userId: member.id,
               displayName: member.displayName
             })),
-            lastUpdate: lastUpdated
+            lastUpdated: lastUpdated, // the displayed string
+            lastUpdate: lastUpdate // the actual date
           };
         }));
+
+        this.projects.sort((a, b) => b.lastUpdate - a.lastUpdate);
+
       } catch (error) {
         console.error('There was an error fetching the projects!', error);
       }
@@ -194,7 +198,7 @@ export default {
       }
       const newProjectId= createdProject.data.id;
       try {
-        this.newStatus = {projectId: newProjectId, description: 'Project created', milestoneDictId: 1};  
+        this.newStatus = {projectId: newProjectId, description: 'Project created.', milestoneDictId: 1};  
         await axios.post(`${apiBaseUrl}/api/statuses`, this.newStatus, {
             headers: { 'authorization': `Bearer ${token}` }}); 
       } catch (error) {
