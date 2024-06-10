@@ -6,13 +6,13 @@
     
     <h2>Team Members</h2>
     <ul>
-      <li v-for="member in teamMembers" :key="member.userId">
+      <li v-for="member in teamMembers" :key="member.userId" class="member-item">
         <router-link :to="'/users/' + member.id">{{ member.displayName }}</router-link>
       </li>
     </ul>
 
     <h2>Project History</h2>
-    <table>
+    <v-table fixed-header class="project-table">
       <thead>
         <tr>
           <th>Date</th>
@@ -29,7 +29,7 @@
           <td>{{ status.description }}</td>
         </tr>
       </tbody>
-    </table>
+    </v-table>
   </div>
 </template>
 
@@ -81,6 +81,11 @@ export default {
 };
 </script>
 
-<style scoped>
-/* Add your styles here */
+<style lang="sass">
+    .member-item
+        margin-left: 30px
+
+    .project-table
+        width: 100%  
+    
 </style>

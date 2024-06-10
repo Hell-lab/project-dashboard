@@ -8,9 +8,9 @@
       <v-spacer></v-spacer>
       <v-btn
         class="login-btn"
-        @click="goToLogin"
+        @click="isLoggedIn ? logout() : goToLogin()"
       >
-        Login
+      {{ isLoggedIn ? 'Logout' : 'Login' }}
       </v-btn>
     </v-app-bar>
 
@@ -21,17 +21,34 @@
     </div>
     
     <v-main class="main-content">
-        <router-view></router-view>
+        <router-view @login-success="handleLoginSuccess"></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      isLoggedIn: false
+    };
+  },
   methods: {
     goToLogin() {
       this.$router.push({ name: 'Login' });
+    },
+    handleLoginSuccess() {
+      this.isLoggedIn = true;
+    },
+    logout() {
+      localStorage.removeItem('token');
+      this.isLoggedIn = false;
+      this.$router.push('/');
+      this.$router.go()
     }
+  },
+  created() {
+    this.isLoggedIn = !!localStorage.getItem('token');
   }
 };
 </script>
