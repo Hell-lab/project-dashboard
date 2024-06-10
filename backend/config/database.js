@@ -91,26 +91,26 @@ const seedDatabase = async () => {
   if (userCount === 0) {
     await User.bulkCreate([
       {
-        username: 'felixfe',
+        username: 'felix',
         displayName: 'Felix Ferchhumer',
         stvDictId: 2,
-        hashedPassword: 'hashedpassword1',
+        hashedPassword: '$2a$10$dfDOSlrZpoU7DqYx9KGbYuKKXsoblj4e953SpABzE8R2uPJddVfMC',
         roleDictId: 1,
         profilePicture: null,
       },
       {
-        username: 'helenafi',
+        username: 'helena',
         displayName: 'Helena Fitze',
         stvDictId: 2,
-        hashedPassword: 'hashedpassword2',
+        hashedPassword: '$2a$10$091rSL80pQfiEA6meoS2k.WYbp6/FrckidaeuASvArmDC5qBr4GOa',
         roleDictId: 2,
         profilePicture: null,
       },
       {
-        username: 'davidfl',
+        username: 'david',
         displayName: 'David Fleischanderl',
         stvDictId: 1,
-        hashedPassword: 'hashedpassword3',
+        hashedPassword: '$2a$10$lX5Gjn5BnrUVkywAATyLF.Ift.iQjOZy.BLVPuI66he.g.vnavsfS',
         roleDictId: 1,
         profilePicture: null,
       },
@@ -198,9 +198,5 @@ const connectDB = async () => {
     console.error('Unable to connect to the database:', error);
   }
 };
-
-
-
-
 
 module.exports = { sequelize, connectDB };
