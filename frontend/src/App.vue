@@ -14,11 +14,13 @@
       </v-btn>
     </v-app-bar>
 
-    <div class="blue-bar">
+    <button @click="goHome">
+      <div class="blue-bar">
       <v-col>
         <h1 class="display-2 font-weight-bold">Dashboard</h1>
       </v-col>
     </div>
+    </button>
     
     <v-main class="main-content">
         <router-view @login-success="handleLoginSuccess"></router-view>
@@ -34,6 +36,9 @@ export default {
     };
   },
   methods: {
+    goHome() {
+      this.$router.push('/');
+    },
     goToLogin() {
       this.$router.push({ name: 'Login' });
     },
@@ -44,7 +49,7 @@ export default {
       localStorage.removeItem('token');
       this.isLoggedIn = false;
       this.$router.push('/');
-      this.$router.go()
+      this.$router.go
     }
   },
   created() {
@@ -79,6 +84,7 @@ body
     font-size: 70px
     margin-left: 5px 
     margin-bottom: 20px
+    text-align: left
   
   h1
     color: #000000
