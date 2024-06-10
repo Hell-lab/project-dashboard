@@ -70,7 +70,8 @@ router.get('/:projectId/team', async (req, res) => {
   }
 });
 
-router.post('/:projectId/team', async (req, res) => {
+// ADD members to a team
+router.post('/:projectId/team', isLoggedIn, async (req, res) => {
   try {
     const { projectId } = req.params;
     const { userId } = req.body;

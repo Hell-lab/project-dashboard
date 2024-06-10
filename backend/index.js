@@ -47,7 +47,6 @@ function verifyRequest(req) {
   req.jwtPayload = null;
 
   if (token) {
-      console.log(`> Authorization: Token "${token}" provided as Authorization-header`)
       token = token.replace("Bearer ", "")
       req.jwtProvided = true;
       jwt.verify(token, jwtSecret, (err, decoded) => {
@@ -65,7 +64,6 @@ function verifyRequest(req) {
 }
 
 function verifyMiddleware(req, res, next) {
-//console.log(`Verify token on request to ${req.url}`)
 verifyRequest(req)
 if(!req.jwtProvided) {
   //console.log(`>>> Not authorized, no token provided`)
