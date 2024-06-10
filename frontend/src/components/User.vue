@@ -6,7 +6,7 @@
   
       <h2>Projects</h2>
       <ul>
-        <li v-for="project in projects" :key="project.id">
+        <li v-for="project in projects" :key="project.id" class="project-item">
           <router-link :to="'/projects/' + project.id">{{ project.name }}</router-link>
         </li>
       </ul>
@@ -54,7 +54,8 @@
   };
   </script>
   
-  <style scoped>
-  /* Add your styles here */
+  <style lang="sass">
+    .project-item
+        margin-left:30px
   </style>
   

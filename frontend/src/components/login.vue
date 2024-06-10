@@ -8,6 +8,7 @@
       <input type="password" id="password" v-model="password"><br><br>
       <button type="submit">Login</button>
     </form>
+    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
   </div>
 </template>
 
@@ -18,7 +19,8 @@ export default {
   data() {
     return {
       username: '',
-      password: ''
+      password: '',
+      errorMessage: ''
     };
   },
   methods: {
@@ -30,13 +32,13 @@ export default {
         .then(response => {
           const { token } = response.data;
           localStorage.setItem('token', token);
-          alert('Login successful!');
+          this.$emit('login-success');
           // Redirect to desired page upon successful login
           this.$router.push('/');
         })
         .catch(error => {
           console.error('Error:', error);
-          alert('Login failed. Please check your credentials.');
+          this.errorMessage = 'Login failed. Please check your credentials.';
           console.error('Server response:', error.response.data);
         });      
     }
@@ -44,6 +46,8 @@ export default {
 };
 </script>
 
-<style>
-/* TODO: Add your CSS styles here */
-</style>
+<style lang="sass">
+ .error-message
+  color: red 
+  margin-top: 10px
+ </style>

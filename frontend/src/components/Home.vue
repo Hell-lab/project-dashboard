@@ -51,7 +51,7 @@
   <v-row>
     <v-col>
       <h3>Project List</h3>
-      <v-simple-table>
+      <v-table fixed-header class="project-table">
         <thead>
           <tr>
             <th>Project</th>
@@ -78,7 +78,7 @@
             </td>
           </tr>
         </tbody>
-      </v-simple-table>
+      </v-table>
     </v-col>
   </v-row>
 </template>
@@ -249,27 +249,13 @@ export default {
 @import "@mdi/font/css/materialdesignicons.min.css"
 @import "@fortawesome/fontawesome-free/css/all.css"
 
-/* Your custom styles */
-
-h1
-  color: #000000
-
 .v-app-bar
   background-color: #ffffff !important
   border-bottom: 1px solid #ccc
 
 .v-btn--icon
   color: #f5a623
-
-.v-simple-table
-  border-spacing: 10px 0
-
-.v-simple-table td
-  border: 1px solid #ccc !important
-  border-collapse: collapse
-  padding: 10px 0
-.v-simple-table th
-  border: 1px solid #ccc !important
-  border-collapse: collapse
-  font-weight: bold
+    
+.project-table
+  width: 100%  
 </style>
