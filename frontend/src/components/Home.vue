@@ -24,11 +24,14 @@
               label="Description"
               required
             ></v-textarea>
-            <v-text-field
-              v-model="newProject.categoryDictId"
+            <v-select
+              v-model="newProject.categories"
+              :items="categoryItems"
+              item-title="name"
+              item-value="id"
               label="Category"
               required
-            ></v-text-field>
+            ></v-select>
             <v-select
               v-model="newProject.team"
               :items="teamMembers"
@@ -99,12 +102,14 @@ export default {
         since: ''
       },
       projects: [],
-      teamMembers: [], // Example team members, replace with actual data
+      teamMembers: [],
+      categories: []
     };
   },
   created() {
     this.fetchProjects();
     this.fetchTeamMembers();
+    this.fetchCategories();
     this.setupWebSocket();
   },
   methods: {
@@ -146,6 +151,19 @@ export default {
         console.error('There was an error fetching the projects!', error);
       }
     },
+    async fetchCategories() {
+      const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
+
+      try {
+        const response = await axios.get(`${apiBaseUrl}/api/categories`);
+        this.categoryItems = response.data.map(cat => ({
+          name: cat.name,
+          id: cat.id
+        }));
+      } catch (error) {
+        console.error('There was an error fetching the team members!', error);
+      }
+    },
     async fetchTeamMembers() {
       const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
 
@@ -162,33 +180,37 @@ export default {
     async addProject() {
       const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
       const token = localStorage.getItem('token');
-      console.log(token);
       var createdProject;
+      const newProjectToSend = {name: this.newProject.name, description: this.newProject.description, categoryDictId: this.categoryItems[this.newProject.categories-1].id }
 
       try {
-        createdProject = await axios.post(`${apiBaseUrl}/api/projects`, this.newProject, {
+        createdProject = await axios.post(`${apiBaseUrl}/api/projects`, newProjectToSend, {
             headers: { 'authorization': `Bearer ${token}` }});
-        this.newProject = { name: '', description: '', categoryDictId: ''};
         this.showAddProjectSection = false;
       } catch (error) {
         console.error('There was an error adding the project!', error);
       }
       const newProjectId= createdProject.data.id;
       try {
-        this.newStatus = {projectId: newProjectId, since: '2024-06-05 09:00:00', description: 'Project created', milestoneDictId: 1};  
+        this.newStatus = {projectId: newProjectId, description: 'Project created', milestoneDictId: 1};  
         await axios.post(`${apiBaseUrl}/api/statuses`, this.newStatus, {
-          headers: { 'authorization': `Bearer ${token}` }}); 
+            headers: { 'authorization': `Bearer ${token}` }}); 
       } catch (error) {
         console.error('There was an error adding the status!', error);
       }
-      try {
-        this.newTeam = {userId: 1};  
+
+      for(let i = 0; i < this.newProject.team.length; i++) {
+        try {
+        this.newTeam = {userId: this.teamMembers[this.newProject.team[i]-1].userId};  
         await axios.post(`${apiBaseUrl}/api/projects/${newProjectId}/team`, this.newTeam, {
-          headers: { 'authorization': `Bearer ${token}` }}); 
-      } catch (error) {
-        console.error('There was an error adding the team!', error);
+            headers: { 'authorization': `Bearer ${token}` }});
+        } catch (error) {
+            console.error('There was an error adding the team!', error);
+        }
       }
-      this.fetchProjects();
+      // Clear fields and refresh the list of projects after adding a new one 
+      this.newProject = {name: '', description: '', categoryDictId: '', team:''};
+      this.fetchProjects();      
     },
     setupWebSocket() {
       this.ws = new WebSocket('ws://localhost:3000');
