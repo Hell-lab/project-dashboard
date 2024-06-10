@@ -131,7 +131,8 @@ export default {
           const lastUpdate = new Date(latestStatus.since);
           const today = new Date();
           const diffTime = Math.abs(today - lastUpdate);
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+          const lastUpdated = (diffDays == 1) ? `${diffDays} day ago` : `${diffDays} days ago`;
 
           const categoryResponse = await axios.get(`${apiBaseUrl}/api/categories/${project.categoryDictId}`);
           const teamResponse = await axios.get(`${apiBaseUrl}/api/projects/${project.id}/team`);
@@ -145,7 +146,7 @@ export default {
               userId: member.id,
               displayName: member.displayName
             })),
-            lastUpdate: `${diffDays} day(s) ago`
+            lastUpdate: lastUpdated
           };
         }));
       } catch (error) {
