@@ -25,7 +25,15 @@
     <v-main class="main-content">
         <router-view @login-success="handleLoginSuccess"></router-view>
     </v-main>
+    <v-footer >
+      <div class="blue-bar-footer">
+        <v-col >
+         <h1 class="display-2 font-weight-bold">2024 — Felix Ferchhumer & Helena Fitze</h1><
+      </v-col>
+      </div>
+    </v-footer>
   </v-app>
+  
 </template>
 
 <script>
@@ -101,4 +109,21 @@ body
     
   .main-content
     margin-left: 20px
+
+  .blue-bar-footer
+    background-color: #1565c0
+    color: #1565c0
+    height: 100px /* Adjust height as needed */
+    padding: 10 px 
+    width: 100%
+    position: fixed
+    bottom: 0
+    left: 0
+
+  .blue-bar-footer h1
+    margin: 0
+    color: #ffffff
+    font-size: 20px 
+    margin-top: 50px
+    text-align: center
   </style>
