@@ -14,16 +14,14 @@
       </v-btn>
     </v-app-bar>
 
-    <v-row class="blue-bar">
+    <div class="blue-bar">
       <v-col>
         <h1 class="display-2 font-weight-bold">Dashboard</h1>
       </v-col>
-    </v-row>
+    </div>
     
-    <v-main>
-      <v-container>
+    <v-main class="main-content">
         <router-view></router-view>
-      </v-container>
     </v-main>
   </v-app>
 </template>
@@ -50,18 +48,20 @@ body
   .v-application
     background-color: #ffffff !important
 
-  .blue-bar
-      background-color: #1565c0
-      color: #1565c0
-      padding: 20px 0 /* Adjust padding as needed */
-      display: flex
-      align-items: center
   
+  .blue-bar
+    background-color: #1565c0
+    color: #1565c0
+    height: 140px /* Adjust height as needed */
+    padding: 10px 
+    margin-top: 50px
+
   .blue-bar h1
     margin: 0
     color: #ffffff
-    font-size: 5rem
-    margin-left: 50px
+    font-size: 70px
+    margin-left: 5px 
+    margin-bottom: 20px
   
   h1
     color: #000000
@@ -75,12 +75,7 @@ body
     color: white !important
     border-radius: 25px
     padding: 10px 20px
-
-  .v-simple-table th 
-    font-weight: bold
-  
-  .v-simple-table td
-    border: 10px solid #ccc
-  .v-simple-table th 
-    border: 10px solid #ccc
-</style>
+    
+  .main-content
+    margin-left: 20px
+  </style>
