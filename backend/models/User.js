@@ -22,7 +22,7 @@ const User = sequelize.define('User', {
   },
   hashedPassword: {
     type: DataTypes.STRING,
-    allowNull: true, // if null: user cannot login (e.g. former StV members)
+    allowNull: true,
   },
   roleDictId: {
     type: DataTypes.INTEGER,
