@@ -17,6 +17,7 @@ if (!jwtSecret) {
 
 const cors = require('cors');
 const { connectDB } = require('./config/database');
+const { initializeWebSocketServer } = require('./services/websocketService');
 
 const loginRoutes = require('./routes/loginRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -95,10 +96,13 @@ app.use('/api/glossary', glossaryRoutes);
 app.use('/api/categories', categoryDictRoutes);
 
 
+const server = require('http').createServer(app);
+initializeWebSocketServer(server);
+
 const startServer = async () => {
   try {
     await connectDB();
-    app.listen(port, () => {
+    server.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
   } catch (error) {
@@ -108,4 +112,4 @@ const startServer = async () => {
 
 startServer();
 
-module.exports = app;
+module.exports = { app };

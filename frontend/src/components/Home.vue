@@ -105,6 +105,7 @@ export default {
   created() {
     this.fetchProjects();
     this.fetchTeamMembers();
+    this.setupWebSocket();
   },
   methods: {
     toggleAddProjectSection() {
@@ -187,7 +188,34 @@ export default {
       } catch (error) {
         console.error('There was an error adding the team!', error);
       }
-      this.fetchProjects(); // Refresh the list of projects after adding a new one
+      this.fetchProjects();
+    },
+    setupWebSocket() {
+      this.ws = new WebSocket('ws://localhost:3000');
+
+      this.ws.onopen = () => {
+        console.log('WebSocket connection established');
+      };
+
+      this.ws.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        if (message.type === 'project-added' || message.type === 'project-updated' || message.type === 'project-deleted') {
+          this.fetchProjects();
+        }
+      };
+
+      this.ws.onclose = () => {
+        console.log('WebSocket connection closed');
+      };
+
+      this.ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+      };
+    }
+  },
+  beforeDestroy() {
+    if (this.ws) {
+      this.ws.close();
     }
   }
 };
