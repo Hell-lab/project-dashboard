@@ -69,7 +69,7 @@
                 <router-link v-if="user && user.userId" :to="`/users/${user.userId}`">{{ user.displayName }}</router-link>
                 <template v-if="index < 1 && project.team.length > 1">, </template>
               </span>
-              <template v-if="project.team.length > 2">and others</template>
+              <template v-if="project.team.length > 2"> et al.</template>
             </td>
           </tr>
         </tbody>

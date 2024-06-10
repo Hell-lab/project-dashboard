@@ -34,10 +34,13 @@ const seedDatabase = async () => {
   if (roleCount === 0) {
     await RoleDict.bulkCreate([
       {
-        name: 'admin',
+        name: 'Admin',
       },
       {
-        name: 'user',
+        name: 'User',
+      },
+      {
+        name: 'Retired',
       },
     ]);
     console.log('Roles have been added to the database.');
@@ -120,6 +123,14 @@ const seedDatabase = async () => {
         roleDictId: 1,
         profilePicture: null,
       },
+      {
+        username: 'markus',
+        displayName: 'Markus Weninger',
+        stvDictId: 2,
+        hashedPassword: null,
+        roleDictId: 3,
+        profilePicture: null,
+      },
     ]);
     console.log('Default users have been added to the database.');
   }
@@ -128,13 +139,13 @@ const seedDatabase = async () => {
   if (projectCount === 0) {
     await Project.bulkCreate([
       {
-        name: 'Dummy event',
-        description: 'Description of dummy event',
+        name: 'WebDev-Projekt',
+        description: 'Das hübsche Design des WebDev-Projekts bewundern.',
         categoryDictId: 1,
       },
       {
-        name: 'Dummy service',
-        description: 'Description of dummy service',
+        name: 'Kuchen backen',
+        description: 'Lehrende mit Essen bestechen',
         categoryDictId: 2,
       },
     ]);
@@ -151,6 +162,10 @@ const seedDatabase = async () => {
       {
         projectId: 1,
         userId: 2,
+      },
+      {
+        projectId: 1,
+        userId: 4,
       },
       {
         projectId: 2,
