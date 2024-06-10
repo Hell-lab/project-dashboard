@@ -45,7 +45,16 @@ router.get('/project/:projectId', async (req, res) => {
 });
 
 // POST create a new status
-router.post('/', isLoggedIn, async (req, res) => {
+/*router.post('/', isLoggedIn, async (req, res) => {
+  try {
+    const status = await Status.create(req.body);
+    res.status(201).json(status);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});*/
+
+router.post('/', async (req, res) => {
   try {
     const status = await Status.create(req.body);
     res.status(201).json(status);

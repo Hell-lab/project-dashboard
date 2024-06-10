@@ -25,21 +25,23 @@
               required
             ></v-textarea>
             <v-text-field
-              v-model="newProject.category"
+              v-model="newProject.categoryDictId"
               label="Category"
               required
             ></v-text-field>
             <v-select
               v-model="newProject.team"
               :items="teamMembers"
+              item-title="displayName"
+              item-value="userId"
               label="Team"
               multiple
               required
             ></v-select>
-            <v-btn type="submit">Add Project</v-btn>
+            <v-btn type="submit" color="primary">Add Project</v-btn>
           </v-form>
         </v-card-text>
-      </v-card>
+       </v-card> 
     </v-col>
   </v-row>
 
@@ -88,15 +90,21 @@ export default {
       newProject: {
         name: '',
         description: '',
-        category: '',
-        team: []
+        categoryDictId: ''
+      },
+      newStatus: {
+        description: 'Project created',
+        projectId: '',
+        milestoneDictId: 1,
+        since: ''
       },
       projects: [],
-      teamMembers: ['Alice', 'Bob', 'Charlie'], // Example team members, replace with actual data
+      teamMembers: [], // Example team members, replace with actual data
     };
   },
   created() {
     this.fetchProjects();
+    this.fetchTeamMembers();
   },
   methods: {
     toggleAddProjectSection() {
@@ -136,6 +144,51 @@ export default {
       } catch (error) {
         console.error('There was an error fetching the projects!', error);
       }
+    },
+    async fetchTeamMembers() {
+      const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
+
+      try {
+        const response = await axios.get(`${apiBaseUrl}/api/Users`);
+        this.teamMembers = response.data.map(member => ({
+          displayName: member.displayName,
+          userId: member.id
+        }));
+        console.log('Mapped Team Members:', this.teamMembers);
+        console.log(this.teamMembers[1].displayName);
+      } catch (error) {
+        console.error('There was an error fetching the team members!', error);
+      }
+    },
+    async addProject() {
+      const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
+      const token = localStorage.getItem('token');
+      var createdProject;
+
+      try {
+        createdProject = await axios.post(`${apiBaseUrl}/api/projects`, this.newProject, {
+            headers: { 'authorization': `Bearer ${token}` }});
+        this.newProject = { name: '', description: '', categoryDictId: ''};
+        this.showAddProjectSection = false;
+      } catch (error) {
+        console.error('There was an error adding the project!', error);
+      }
+      const newProjectId= createdProject.data.id;
+      try {
+        this.newStatus = {projectId: newProjectId, since: '2024-06-05 09:00:00', description: 'Project created', milestoneDictId: 1};  
+        console.log(this.newStatus);
+        await axios.post(`${apiBaseUrl}/api/statuses`, this.newStatus); 
+      } catch (error) {
+        console.error('There was an error adding the status!', error);
+      }
+      try {
+        this.newTeam = {userId: 1};  
+        console.log(this.newTeam);
+        await axios.post(`${apiBaseUrl}/api/projects/${newProjectId}/team`, this.newTeam); 
+      } catch (error) {
+        console.error('There was an error adding the team!', error);
+      }
+      this.fetchProjects(); // Refresh the list of projects after adding a new one
     }
   }
 };
