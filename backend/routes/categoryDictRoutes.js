@@ -4,7 +4,7 @@ const { getAllCategories, getCategoryById, createCategory } = require('../servic
 const { isAdmin } = require('../middlewares/authMiddleware');
 
 // GET all categories
-router.get('/categories', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const categories = await getAllCategories();
     res.json(categories);
@@ -14,7 +14,7 @@ router.get('/categories', async (req, res) => {
 });
 
 // POST create a new category
-router.post('/categories', isAdmin, async (req, res) => {
+router.post('/', isAdmin, async (req, res) => {
   try {
     const category = await createCategory(req.body);
     res.status(201).json(category);
@@ -24,7 +24,7 @@ router.post('/categories', isAdmin, async (req, res) => {
 });
 
 // GET category by ID
-router.get('/categories/:categoryId', async (req, res) => {
+router.get('/:categoryId', async (req, res) => {
   try {
     const category = await getCategoryById(req.params.categoryId);
     res.json(category);

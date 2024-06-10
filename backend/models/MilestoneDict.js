@@ -12,6 +12,10 @@ const MilestoneDict = sequelize.define('MilestoneDict', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 }, {
   tableName: 'milestone_dict',
   timestamps: false,

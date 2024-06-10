@@ -4,7 +4,7 @@ const { getAllItems, getItemById, createItem } = require('../services/stvDictSer
 const { isAdmin } = require('../middlewares/authMiddleware');
 
 // GET all items in the StvDict
-router.get('/stvDict', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const items = await getAllItems();
     res.json(items);
@@ -14,7 +14,7 @@ router.get('/stvDict', async (req, res) => {
 });
 
 // POST create a new item in the StvDict
-router.post('/stvDict', isAdmin, async (req, res) => {
+router.post('/', isAdmin, async (req, res) => {
   try {
     const item = await createItem(req.body);
     res.status(201).json(item);
@@ -24,7 +24,7 @@ router.post('/stvDict', isAdmin, async (req, res) => {
 });
 
 // GET item in the StvDict by ID
-router.get('/stvDict/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const item = await getItemById(req.params.id);
     res.json(item);

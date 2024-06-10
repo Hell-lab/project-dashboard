@@ -67,21 +67,27 @@ const seedDatabase = async () => {
     await MilestoneDict.bulkCreate([
       {
         name: 'Discussing',
+        description: 'The project has been suggested. We are now figuring out if we have the resources to implement it.'
       },
       {
         name: 'Planning in Process',
+        description: 'We are working on the project.'
       },
       {
         name: 'Pending Publication',
+        description: 'The project is done, we are waiting to share it with you.'
       },
       {
         name: 'Completed',
+        description: 'We are completely done with the project.'
       },
       {
         name: 'Postponed',
+        description: 'We cannot work on the project in the near future and have therefore postponed it. It will be revisited periodically, see status information for more details.'
       },
       {
         name: 'Rejected',
+        description: 'The project idea has been rejected. See status information for more details.'
       },
     ]);
     console.log('Milestones have been added to the database.');

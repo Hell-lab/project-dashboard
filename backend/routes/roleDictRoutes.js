@@ -4,7 +4,7 @@ const { getAllRoles, getRoleById, createRole } = require('../services/roleDictSe
 const { isAdmin } = require('../middlewares/authMiddleware');
 
 // GET all roles
-router.get('/roles', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const roles = await getAllRoles();
     res.json(roles);
@@ -14,7 +14,7 @@ router.get('/roles', async (req, res) => {
 });
 
 // POST create a new role
-router.post('/roles', isAdmin, async (req, res) => {
+router.post('/', isAdmin, async (req, res) => {
   try {
     const role = await createRole(req.body);
     res.status(201).json(role);
@@ -24,7 +24,7 @@ router.post('/roles', isAdmin, async (req, res) => {
 });
 
 // GET role by ID
-router.get('/roles/:roleId', async (req, res) => {
+router.get('/:roleId', async (req, res) => {
   try {
     const role = await getRoleById(req.params.roleId);
     res.json(role);

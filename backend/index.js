@@ -91,13 +91,13 @@ app.use('/login', loginRoutes);
 //app.use(verifyMiddleware);
 
 app.use('/api/users', userRoutes);
-app.use('/api/stvDict', stvDictRoutes);
+app.use('/api/stvs', stvDictRoutes);
 app.use('/api/statuses', statusRoutes);
-app.use('/api/roleDict', roleDictRoutes);
+app.use('/api/roles', roleDictRoutes);
 app.use('/api/projects', projectRoutes);
-app.use('/api/milestoneDict', milestoneDictRoutes);
+app.use('/api/milestones', milestoneDictRoutes);
 app.use('/api/glossary', glossaryRoutes);
-app.use('/api/categoryDict', categoryDictRoutes);
+app.use('/api/categories', categoryDictRoutes);
 
 
 const startServer = async () => {

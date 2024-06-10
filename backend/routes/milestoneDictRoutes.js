@@ -4,7 +4,7 @@ const { getAllMilestones, getMilestoneById, createMilestone } = require('../serv
 const { isAdmin } = require('../middlewares/authMiddleware');
 
 // GET all milestones
-router.get('/milestones', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const milestones = await getAllMilestones();
     res.json(milestones);
@@ -14,7 +14,7 @@ router.get('/milestones', async (req, res) => {
 });
 
 // POST create a new milestone
-router.post('/milestones', isAdmin, async (req, res) => {
+router.post('/', isAdmin, async (req, res) => {
   try {
     const milestone = await createMilestone(req.body);
     res.status(201).json(milestone);
@@ -24,7 +24,7 @@ router.post('/milestones', isAdmin, async (req, res) => {
 });
 
 // GET milestone by ID
-router.get('/milestones/:milestoneId', async (req, res) => {
+router.get('/:milestoneId', async (req, res) => {
   try {
     const milestone = await getMilestoneById(req.params.milestoneId);
     res.json(milestone);
