@@ -26,7 +26,7 @@
             ></v-textarea>
             <v-select
               v-model="newProject.categories"
-              :items="categoryitems"
+              :items="categoryItems"
               item-title="name"
               item-value="id"
               label="Category"
@@ -155,7 +155,7 @@ export default {
 
       try {
         const response = await axios.get(`${apiBaseUrl}/api/categories`);
-        this.categoryitems = response.data.map(cat => ({
+        this.categoryItems = response.data.map(cat => ({
           name: cat.name,
           id: cat.id
         }));
@@ -179,9 +179,9 @@ export default {
     async addProject() {
       const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
       const token = localStorage.getItem('token');
-      console.log(token);
       var createdProject;
-      const newProjectToSend = {name: this.newProject.name, description: this.newProject.description, categoryDictId: this.categoryitems[this.newProject.categories[0]-1].id }
+      const newProjectToSend = {name: this.newProject.name, description: this.newProject.description, categoryDictId: this.categoryItems[this.newProject.categories-1].id }
+      console.log("Test2");
 
       try {
         createdProject = await axios.post(`${apiBaseUrl}/api/projects`, newProjectToSend, {
