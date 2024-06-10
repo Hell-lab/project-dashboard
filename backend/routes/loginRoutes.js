@@ -1,6 +1,11 @@
 const express = require('express');
+var bcrypt = require('bcrypt');
 const router = express.Router();
 const { findUserByUsername } = require('../services/userService');
+var jwt = require('jsonwebtoken');
+
+const saltRounds = 10;
+const jwtSecret = process.env.JWT_SECRET;
 
 // login endpoint
 router.post('/', async function(req, res) {
@@ -11,15 +16,15 @@ router.post('/', async function(req, res) {
 
     try {
         const user = await findUserByUsername(username);
-        if (user && await bcrypt.compare(pw, user.pw)) {
+        if (user && await bcrypt.compare(pw, user.hashedPassword)) {
             const token = jwt.sign({ username: user.username, userIsAdmin: user.roleDictId == 0 }, jwtSecret, { expiresIn: '1h' });
             res.send({ status: 'success', message: 'Login successful', token: token, expiresAt: Date.now() + 3600000 });
         } else {
             res.status(401).send({ status: 'fail', message: 'Invalid credentials' });
         }
     } catch (error) {
+        console.log(error);
         res.status(500).send({ status: 'fail', message: 'Server error' });
     }
   });
-
   module.exports = router;

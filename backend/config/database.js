@@ -20,7 +20,7 @@ const connectDB = async () => {
 
     require('../models');
 
-    await sequelize.sync({ force: true }); // force: true will drop the table if it already exists; alter: true will change table to match models
+    await sequelize.sync({ force: false }); // force: true will drop the table if it already exists; alter: true will change table to match models
     console.log('All models were synchronized successfully.');
 
   } catch (error) {
