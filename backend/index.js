@@ -38,11 +38,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
-// when user opens /login or /register, the file public/login.html should be returned
-app.get(["/login", "/register"], function(req, res, next) {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
-});
-
 
 function verifyRequest(req) {
   let token = req.headers['authorization'];
@@ -93,7 +88,7 @@ app.use('/login', loginRoutes);
 // The order of our middlewares matters: If we put this before
 // setting up our express.static middleware, JWT would even be checked
 // for every static resource, which would introduce unnecessary overhead.
-//app.use(verifyMiddleware);
+app.use(verifyMiddleware);
 
 app.use('/api/users', userRoutes);
 app.use('/api/stvDict', stvDictRoutes);
