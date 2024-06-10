@@ -81,4 +81,25 @@ router.delete('/:statusId', isAdmin, async (req, res) => {
   }
 });
 
+// DELETE statuses by project ID
+router.delete('/project/:projectId', isAdmin, async (req, res) => {
+  try {
+    const statuses = await Status.findAll({
+      where: {
+        projectId: req.params.projectId,
+      }
+    });
+    
+    await statuses.forEach(status => {
+      console.log("Deleting status: " + status.id)
+      status.destroy()
+    });
+    res.json({ message: 'Statuses deleted successfully' });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
 module.exports = router;
