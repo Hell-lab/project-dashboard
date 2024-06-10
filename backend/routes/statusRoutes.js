@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Status = require('../models/Status');
+const Project = require('../models/Project');
 const { isAdmin, isLoggedIn } = require('../middlewares/authMiddleware');
 
 // GET all statuses
@@ -21,6 +22,23 @@ router.get('/:statusId', async (req, res) => {
       return res.status(404).json({ message: 'Status not found' });
     }
     res.json(status);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// GET status by project ID
+router.get('/project/:projectId', async (req, res) => {
+  try {
+    const statuses = await Status.findAll({
+      where: {
+        projectId: req.params.projectId,
+      }
+    });
+    if (!statuses) {
+      return res.status(404).json({ message: 'No status found for project' });
+    }
+    res.json(statuses);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
