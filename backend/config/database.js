@@ -156,6 +156,10 @@ const seedDatabase = async () => {
         projectId: 2,
         userId: 3,
       },
+      {
+        projectId: 2,
+        userId: 2,
+      },
     ]);
     console.log('Project teams have been added to the database.');
   }
@@ -183,6 +187,9 @@ const seedDatabase = async () => {
       },
     ]);
     console.log('Status entries have been added to the database.');
+
+    console.log('Seeding complete.');
+
   }
 };
 
@@ -199,8 +206,6 @@ const connectDB = async () => {
 
     console.log('Attempting to seed database.');
     seedDatabase();
-    console.log('Seeding complete.');
-
 
   } catch (error) {
     console.error('Unable to connect to the database:', error);

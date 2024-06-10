@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { addUser, deleteUser, modifyUser, findAllUsers, filterUsers, sortUsers } = require('../services/userService');
+const { getAllProjects } = require('../services/teamService');
 const { isAdmin } = require('../middlewares/authMiddleware');
 
 // GET all users
@@ -16,7 +17,7 @@ router.get('/', async (req, res) => {
 // GET user by ID
 router.get('/:userId', async (req, res) => {
   try {
-    const user = await findAllUsers({ ID: req.params.userId });
+    const user = await filterUsers({ id: req.params.userId });
     if (!user.length) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -25,6 +26,17 @@ router.get('/:userId', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+// GET all projects of a user
+router.get('/:userId/projects', async (req, res) => {
+  try {
+    const projects = await getAllProjects(req.params.userId);
+    res.json(projects);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 
 // POST create a new user
 router.post('/', isAdmin, async (req, res) => {

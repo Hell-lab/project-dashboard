@@ -7,7 +7,7 @@
     <h2>Team Members</h2>
     <ul>
       <li v-for="member in teamMembers" :key="member.userId">
-        <router-link :to="'/users/' + member.userId">{{ member.User.displayName }}</router-link>
+        <router-link :to="'/users/' + member.id">{{ member.displayName }}</router-link>
       </li>
     </ul>
 
