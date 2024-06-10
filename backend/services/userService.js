@@ -5,11 +5,11 @@ const addUser = async (userData) => {
 };
 
 const deleteUser = async (userId) => {
-  return await User.destroy({ where: { ID: userId } });
+  return await User.destroy({ where: { id: userId } });
 };
 
 const modifyUser = async (userId, userData) => {
-  return await User.update(userData, { where: { ID: userId } });
+  return await User.update(userData, { where: { id: userId } });
 };
 
 const findAllUsers = async () => {
@@ -27,5 +27,7 @@ const sortUsers = async (orderCriteria) => {
 const findUserByUsername = async (username) => {
   return await User.findOne({ where: { username: username } });
 };
+
+
 
 module.exports = { addUser, deleteUser, modifyUser, findAllUsers, filterUsers, sortUsers, findUserByUsername };
