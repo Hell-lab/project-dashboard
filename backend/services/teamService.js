@@ -59,4 +59,11 @@ const removeTeamMember = async (projectId, userId) => {
   return teamMember;
 };
 
-module.exports = { getAllTeamMembers, createTeam, addTeamMember, removeTeamMember, getAllProjects };
+const removeAllTeamMembers = async (projectId) => {
+  const teams = await Team.findAll({ where: { projectId: projectId } });
+  
+  teams.forEach(team => team.destroy());
+  return teams;
+};
+
+module.exports = { getAllTeamMembers, createTeam, addTeamMember, removeTeamMember, removeAllTeamMembers, getAllProjects };

@@ -44,9 +44,11 @@ router.get('/project/:projectId', async (req, res) => {
   }
 });
 
+// POST add new status
 router.post('/', isLoggedIn, async (req, res) => {
   try {
     const status = await Status.create(req.body);
+    notifyClients({ type: 'project-updated', status });
     res.status(201).json(status);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -80,5 +82,26 @@ router.delete('/:statusId', isAdmin, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+// DELETE statuses by project ID
+router.delete('/project/:projectId', isAdmin, async (req, res) => {
+  try {
+    const statuses = await Status.findAll({
+      where: {
+        projectId: req.params.projectId,
+      }
+    });
+    
+    await statuses.forEach(status => {
+      console.log("Deleting status: " + status.id)
+      status.destroy()
+    });
+    res.json({ message: 'Statuses deleted successfully' });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 
 module.exports = router;
