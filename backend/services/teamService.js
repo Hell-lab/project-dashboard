@@ -37,6 +37,10 @@ const getAllProjects = async (userId) => {
   }
 };
 
+const createTeam = async (projectId, ...userIds) => {
+  await userIds.forEach(userId => addTeamMember(projectId, userId));
+};
+
 
 const addTeamMember = async (projectId, userId) => {
   const existingMember = await Team.findOne({ where: { projectId: projectId, userId: userId } });
@@ -55,4 +59,4 @@ const removeTeamMember = async (projectId, userId) => {
   return teamMember;
 };
 
-module.exports = { getAllTeamMembers, addTeamMember, removeTeamMember, getAllProjects };
+module.exports = { getAllTeamMembers, createTeam, addTeamMember, removeTeamMember, getAllProjects };

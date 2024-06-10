@@ -10,11 +10,12 @@ const Status = sequelize.define('Status', {
   },
   description: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   since: {
     type: DataTypes.DATE,
     allowNull: false,
+    defaultValue: DataTypes.NOW,
   },
   milestoneDictId: {
     type: DataTypes.INTEGER,
