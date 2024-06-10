@@ -43,13 +43,11 @@
       try {
         // Fetch general project information
         const projectResponse = await axios.get(`http://localhost:3000/api/projects/${projectId}`);
-        console.log(this.project);
+        this.project = projectResponse.data;
   
         // Fetch team members
         const teamResponse = await axios.get(`http://localhost:3000/api/projects/${projectId}/team`);
         this.teamMembers = teamResponse.data;
-
-        console.log(this.teamMembers);
   
         // Fetch statuses
         const statusesResponse = await axios.get(`http://localhost:3000/api/statuses/project/${projectId}`);
