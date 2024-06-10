@@ -22,7 +22,7 @@ router.post('/', async function(req, res) {
             res.status(401).send({ status: 'fail', message: 'Invalid credentials' });
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).send({ status: 'fail', message: 'Server error' });
     }
   });

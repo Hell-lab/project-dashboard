@@ -154,8 +154,6 @@ export default {
           displayName: member.displayName,
           userId: member.id
         }));
-        console.log('Mapped Team Members:', this.teamMembers);
-        console.log(this.teamMembers[1].displayName);
       } catch (error) {
         console.error('There was an error fetching the team members!', error);
       }
@@ -163,6 +161,7 @@ export default {
     async addProject() {
       const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
       const token = localStorage.getItem('token');
+      console.log(token);
       var createdProject;
 
       try {
@@ -176,15 +175,15 @@ export default {
       const newProjectId= createdProject.data.id;
       try {
         this.newStatus = {projectId: newProjectId, since: '2024-06-05 09:00:00', description: 'Project created', milestoneDictId: 1};  
-        console.log(this.newStatus);
-        await axios.post(`${apiBaseUrl}/api/statuses`, this.newStatus); 
+        await axios.post(`${apiBaseUrl}/api/statuses`, this.newStatus, {
+          headers: { 'authorization': `Bearer ${token}` }}); 
       } catch (error) {
         console.error('There was an error adding the status!', error);
       }
       try {
         this.newTeam = {userId: 1};  
-        console.log(this.newTeam);
-        await axios.post(`${apiBaseUrl}/api/projects/${newProjectId}/team`, this.newTeam); 
+        await axios.post(`${apiBaseUrl}/api/projects/${newProjectId}/team`, this.newTeam, {
+          headers: { 'authorization': `Bearer ${token}` }}); 
       } catch (error) {
         console.error('There was an error adding the team!', error);
       }

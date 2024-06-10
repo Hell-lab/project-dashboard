@@ -61,22 +61,20 @@ function verifyRequest(req) {
               req.jwtPayload = decoded;
           }
       });
-  } else {
-      console.log("> Authorization: No token provided as Authorization-header")
   }
 }
 
 function verifyMiddleware(req, res, next) {
-console.log(`Verify token on request to ${req.url}`)
+//console.log(`Verify token on request to ${req.url}`)
 verifyRequest(req)
 if(!req.jwtProvided) {
-  console.log(`>>> Not authorized, no token provided`)
+  //console.log(`>>> Not authorized, no token provided`)
 } else if(req.jwtProvided && !req.jwtVerifyError) {
-  console.log(`>>> Authorized`)
+  //console.log(`>>> Authorized`)
 } else if(req.jwtProvided && req.jwtVerifyError && req.jwtExpired) {
-  console.log(`>>> Not authorized, token expired`)
+  //console.log(`>>> Not authorized, token expired`)
 } else {
-  console.log(`>>> Not authorized, error during token verification`)
+  //console.log(`>>> Not authorized, error during token verification`)
 }
 next()
 }

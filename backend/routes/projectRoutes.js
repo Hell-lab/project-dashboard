@@ -25,18 +25,8 @@ router.get('/:projectId', async (req, res) => {
 });
 
 // POST create a new project
-/*router.post('/', isLoggedIn, async (req, res) => {
+router.post('/', isLoggedIn, async (req, res) => {
   try {
-    const project = await addProject(req.body);
-    res.status(201).json(project);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});*/
-
-router.post('/', async (req, res) => {
-  try {
-    console.log(req.body);
     const project = await addProject(req.body);
     res.status(201).json(project);
   } catch (error) {
@@ -80,26 +70,11 @@ router.get('/:projectId/team', async (req, res) => {
   }
 });
 
-// POST add new team member to a project
-/*router.post('/:projectId/team', isLoggedIn, async (req, res) => {
-  try {
-    const { projectId } = req.params;
-    const { userId } = req.body;
-    const teamMember = await addTeamMember(projectId, userId);
-    res.status(201).json(teamMember);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});*/
-
 router.post('/:projectId/team', async (req, res) => {
   try {
     const { projectId } = req.params;
     const { userId } = req.body;
-    console.log(projectId);
-    console.log(userId);
     const teamMember = await addTeamMember(projectId, userId);
-    console.log(teamMember);
     res.status(201).json(teamMember);
   } catch (error) {
     res.status(400).json({ message: error.message });
