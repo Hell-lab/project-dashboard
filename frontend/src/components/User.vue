@@ -2,7 +2,13 @@
     <div class="user-detail">
       <h1>{{ user.displayName }}</h1>
       <p><strong>Role:</strong> {{ role.name }}</p>
-      <img :src="userProfilePictureUrl" alt="Profile Picture" v-if="userProfilePictureUrl" />
+      <div class="profile-picture-section">
+        <img :src="userProfilePictureUrl" alt="Profile Picture" v-if="userProfilePictureUrl" height="200"/>
+        <div class="upload-section" v-if="showChangeProfilePicture">
+            <input type="file" @change="onFileChange" class="input-btn"/>
+            <v-btn @click="uploadProfilePicture" class="upload-btn">Upload Profile Picture</v-btn>
+        </div>
+      </div>
   
       <h2>Projects</h2>
       <ul>
@@ -23,6 +29,8 @@
         role: {},
         projects: [],
         userProfilePictureUrl: null,
+        selectedFile: null,
+        showChangeProfilePicture: (localStorage.getItem('token') !== null),
       };
     },
     async created() {
@@ -50,6 +58,34 @@
       } catch (error) {
         console.error('Error fetching user details:', error);
       }
+    },
+    methods: {
+        onFileChange(event) {
+        this.selectedFile = event.target.files[0];
+        },
+        async uploadProfilePicture() {
+        if (!this.selectedFile) return;
+
+        const userId = this.$route.params.userId;
+        const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
+
+        const token = localStorage.getItem('token');
+
+        const formData = new FormData();
+        formData.append('profilePicture', this.selectedFile);
+
+        try {
+            await axios.post(`${apiBaseUrl}/api/users/${userId}/uploadProfilePicture`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'authorization': `Bearer ${token}` 
+            }
+            });
+            this.$router.go()
+        } catch (error) {
+            console.error('Error uploading profile picture:', error);
+        }
+      }
     }
   };
   </script>
@@ -57,5 +93,32 @@
   <style lang="sass">
     .project-item
         margin-left:30px
+    
+    .upload-btn
+        background-color: #f5a623 !important
+        color: white !important
+        border-radius: 25px
+        padding: 10px 20px
+        border: none
+        cursor: pointer
+
+    .profile-picture-section 
+        display: flex
+        align-items: center
+
+    .profile-picture-section img 
+        margin-right: 20px
+        max-width: 150px
+        height: auto
+
+
+    .upload-section 
+        display: flex
+        flex-direction: column
+
+
+    .input-btn 
+        margin-bottom: 10px
+
   </style>
   

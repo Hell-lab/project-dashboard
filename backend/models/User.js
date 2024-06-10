@@ -29,7 +29,7 @@ const User = sequelize.define('User', {
     allowNull: false,
   },
   profilePicture: {
-    type: DataTypes.BLOB,
+    type: DataTypes.BLOB('long'),
     allowNull: true,
   },
 }, {

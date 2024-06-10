@@ -1,8 +1,14 @@
 const express = require('express');
+const multer = require('multer');
 const router = express.Router();
 const { addUser, deleteUser, modifyUser, findAllUsers, filterUsers, sortUsers } = require('../services/userService');
 const { getAllProjects } = require('../services/teamService');
 const { isAdmin } = require('../middlewares/authMiddleware');
+const { isLoggedIn } = require('../middlewares/authMiddleware');
+
+// Configure multer for file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // GET all users
 router.get('/', async (req, res) => {
@@ -91,6 +97,19 @@ router.post('/sort', async (req, res) => {
     res.json(users);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+});
+
+router.post('/:userId/uploadProfilePicture', isLoggedIn, upload.single('profilePicture'), async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const profilePicture = req.file.buffer;
+    console.log(userId);
+    console.log(profilePicture);
+    await modifyUser(userId, { profilePicture });
+    res.json({ message: 'Profile picture uploaded successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
