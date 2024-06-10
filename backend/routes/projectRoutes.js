@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { addProject, findAllProjects, getProjectById, deleteProject, modifyProject } = require('../services/projectService');
 const { getAllTeamMembers, addTeamMember, removeTeamMember } = require('../services/teamService');
+const { notifyClients } = require('../services/websocketService');
 const { isLoggedIn } = require('../middlewares/authMiddleware');
 
 // GET all projects
@@ -9,6 +10,7 @@ router.get('/', async (req, res) => {
   try {
     const projects = await findAllProjects();
     res.json(projects);
+    notifyClients( 'Fetching some projects' );
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -28,6 +30,7 @@ router.get('/:projectId', async (req, res) => {
 router.post('/', isLoggedIn, async (req, res) => {
   try {
     const project = await addProject(req.body);
+    notifyClients({ type: 'project-added', project });
     res.status(201).json(project);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -38,6 +41,7 @@ router.post('/', isLoggedIn, async (req, res) => {
 router.put('/:projectId', isLoggedIn, async (req, res) => {
   try {
     const project = await modifyProject(req.params.projectId, req.body);
+    notifyClients({ type: 'project-updated', project });
     res.json(project);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -48,6 +52,7 @@ router.put('/:projectId', isLoggedIn, async (req, res) => {
 router.delete('/:projectId', isLoggedIn, async (req, res) => {
   try {
     await deleteProject(req.params.projectId);
+    notifyClients({ type: 'project-deleted' });
     res.json({ message: 'Project deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });

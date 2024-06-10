@@ -111,6 +111,7 @@ export default {
     this.fetchProjects();
     this.fetchTeamMembers();
     this.fetchCategories();
+    this.setupWebSocket();
   },
   methods: {
     toggleAddProjectSection() {
@@ -182,7 +183,6 @@ export default {
       const token = localStorage.getItem('token');
       var createdProject;
       const newProjectToSend = {name: this.newProject.name, description: this.newProject.description, categoryDictId: this.categoryItems[this.newProject.categories-1].id }
-      console.log("Test2");
 
       try {
         createdProject = await axios.post(`${apiBaseUrl}/api/projects`, newProjectToSend, {
@@ -209,9 +209,36 @@ export default {
             console.error('There was an error adding the team!', error);
         }
       }
-
+      // Clear fields and refresh the list of projects after adding a new one 
       this.newProject = {name: '', description: '', categoryDictId: '', team:''};
-      this.fetchProjects(); // Refresh the list of projects after adding a new one      
+      this.fetchProjects();      
+    },
+    setupWebSocket() {
+      this.ws = new WebSocket('ws://localhost:3000');
+
+      this.ws.onopen = () => {
+        console.log('WebSocket connection established');
+      };
+
+      this.ws.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        if (message.type === 'project-added' || message.type === 'project-updated' || message.type === 'project-deleted') {
+          this.fetchProjects();
+        }
+      };
+
+      this.ws.onclose = () => {
+        console.log('WebSocket connection closed');
+      };
+
+      this.ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+      };
+    }
+  },
+  beforeDestroy() {
+    if (this.ws) {
+      this.ws.close();
     }
   }
 };
