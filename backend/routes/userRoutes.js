@@ -100,12 +100,11 @@ router.post('/sort', async (req, res) => {
   }
 });
 
+// POST upload profile pics
 router.post('/:userId/uploadProfilePicture', isLoggedIn, upload.single('profilePicture'), async (req, res) => {
   try {
     const userId = req.params.userId;
     const profilePicture = req.file.buffer;
-    console.log(userId);
-    console.log(profilePicture);
     await modifyUser(userId, { profilePicture });
     res.json({ message: 'Profile picture uploaded successfully' });
   } catch (error) {
