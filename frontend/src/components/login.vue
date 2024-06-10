@@ -23,7 +23,9 @@ export default {
   },
   methods: {
     login() {
-      const url = 'http://localhost:3000/login'; // TODO: Adjust URL
+      const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
+
+      const url = `${apiBaseUrl}/login`; 
       axios.post(url, { username: this.username, pw: this.password })
         .then(response => {
           const { token } = response.data;

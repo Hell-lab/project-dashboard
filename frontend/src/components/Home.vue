@@ -180,6 +180,7 @@ export default {
     async addProject() {
       const apiBaseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
       const token = localStorage.getItem('token');
+      console.log(token);
       var createdProject;
       const newProjectToSend = {name: this.newProject.name, description: this.newProject.description, categoryDictId: this.categoryitems[this.newProject.categories[0]-1].id }
 

@@ -47,7 +47,6 @@ function verifyRequest(req) {
   req.jwtPayload = null;
 
   if (token) {
-      console.log(`> Authorization: Token "${token}" provided as Authorization-header`)
       token = token.replace("Bearer ", "")
       req.jwtProvided = true;
       jwt.verify(token, jwtSecret, (err, decoded) => {
@@ -55,29 +54,25 @@ function verifyRequest(req) {
               req.jwtVerifyError = true;
               // Check if the error is because the JWT has expired
               if (err.name === 'TokenExpiredError') {
-                  req.jwtExpired = true; // You can add this line to indicate specifically that the JWT expired
+                  req.jwtExpired = true;
               }
           } else {
-              // console.log("JWT: ", decoded)
               req.jwtPayload = decoded;
           }
       });
-  } else {
-      console.log("> Authorization: No token provided as Authorization-header")
   }
 }
 
 function verifyMiddleware(req, res, next) {
-console.log(`Verify token on request to ${req.url}`)
 verifyRequest(req)
 if(!req.jwtProvided) {
-  console.log(`>>> Not authorized, no token provided`)
+  //console.log(`>>> Not authorized, no token provided`)
 } else if(req.jwtProvided && !req.jwtVerifyError) {
-  console.log(`>>> Authorized`)
+  //console.log(`>>> Authorized`)
 } else if(req.jwtProvided && req.jwtVerifyError && req.jwtExpired) {
-  console.log(`>>> Not authorized, token expired`)
+  //console.log(`>>> Not authorized, token expired`)
 } else {
-  console.log(`>>> Not authorized, error during token verification`)
+  //console.log(`>>> Not authorized, error during token verification`)
 }
 next()
 }
@@ -88,7 +83,7 @@ app.use('/login', loginRoutes);
 // The order of our middlewares matters: If we put this before
 // setting up our express.static middleware, JWT would even be checked
 // for every static resource, which would introduce unnecessary overhead.
-//app.use(verifyMiddleware);
+app.use(verifyMiddleware);
 
 app.use('/api/users', userRoutes);
 app.use('/api/stvs', stvDictRoutes);
