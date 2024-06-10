@@ -1,13 +1,13 @@
 <template>
   <v-row>
     <v-col>
-      <v-btn
+      <v-btn 
         class="mt-4"
         color="primary"
         @click="toggleAddProjectSection"
+        v-if="showAddproject"
       >
         Add New Project
-        <!--<v-icon right>{{ showAddProjectSection ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>-->
       </v-btn>
 
       <v-card v-if="showAddProjectSection">
@@ -90,6 +90,7 @@ export default {
   data() {
     return {
       showAddProjectSection: false,
+      showAddproject: (localStorage.getItem('token') !== null),
       newProject: {
         name: '',
         description: '',
