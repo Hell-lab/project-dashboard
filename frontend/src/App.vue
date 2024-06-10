@@ -20,10 +20,8 @@
       </v-col>
     </div>
     
-    <v-main>
-      <v-container>
+    <v-main class="main-content">
         <router-view></router-view>
-      </v-container>
     </v-main>
   </v-app>
 </template>
@@ -77,4 +75,7 @@ body
     color: white !important
     border-radius: 25px
     padding: 10px 20px
-</style>
+    
+  .main-content
+    margin-left: 20px
+  </style>

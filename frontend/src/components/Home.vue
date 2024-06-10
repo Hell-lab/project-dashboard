@@ -1,5 +1,4 @@
 <template>
-    <v-container>
          <v-row>
           <v-col>
             <v-btn
@@ -63,23 +62,53 @@
                 <tr v-for="project in projects" :key="project.name">
                   <td>{{ project.name }}</td>
                   <td>{{ project.description }}</td>
-                  <td>{{ project.category }}</td>
+                  <!--<td>{{ project.category }}</td>
                   <td>{{ project.status }}</td>
                   <td>{{ project.statusInfo }}</td>
                   <td>{{ project.team.join(', ') }}</td>
-                  <td>{{ project.lastUpdate }}</td>
+                  <td>{{ project.lastUpdate }}</td>-->
                 </tr>
               </tbody>
             </v-simple-table>
           </v-col>
         </v-row>
-      </v-container>
   </template>
   
   <script>
-  export default {
-    name: 'Home'
-  };
+  import axios from 'axios';
+
+    export default {
+    data() {
+        return {
+        showAddProjectSection: false,
+        newProject: {
+            name: '',
+            description: '',
+            category: '',
+            team: []
+        },
+        projects: [],
+        teamMembers: ['Alice', 'Bob', 'Charlie'], // Example team members, replace with actual data
+        };
+    },
+    created() {
+        this.fetchProjects();
+    },
+    methods: {
+        toggleAddProjectSection() {
+        this.showAddProjectSection = !this.showAddProjectSection;
+        },
+        fetchProjects() {
+        axios.get('http://localhost:3000/api/projects')
+            .then(response => {
+            this.projects = response.data;
+            })
+            .catch(error => {
+            console.error('There was an error fetching the projects!', error);
+            });
+        }
+    }
+    };
   </script>
   
   <style lang="sass">
@@ -99,13 +128,18 @@
     .v-btn--icon
         color: #f5a623
     
-    .v-simple-table th 
-        font-weight: bold
+    .v-simple-table 
+        border-spacing: 10px 0
+        
     
     
     .v-simple-table td
-        border: 10px solid #ccc
+        border: 1px solid #ccc !important
+        border-collapse: collapse
+        padding: 10px 0
     .v-simple-table th 
-        border: 10px solid #ccc
+        border: 1px solid #ccc  !important
+        border-collapse: collapse
+        font-weight: bold
 </style>
     
