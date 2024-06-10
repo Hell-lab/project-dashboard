@@ -193,6 +193,8 @@ const connectDB = async () => {
 
     console.log('Attempting to seed database.');
     seedDatabase();
+    console.log('Seeding complete.');
+
 
   } catch (error) {
     console.error('Unable to connect to the database:', error);

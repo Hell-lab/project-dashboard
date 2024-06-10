@@ -58,7 +58,13 @@ router.delete('/:projectId', isLoggedIn, async (req, res) => {
 router.get('/:projectId/team', async (req, res) => {
   try {
     const teamMembers = await getAllTeamMembers(req.params.projectId);
+
+    if (!teamMembers.length) {
+      return res.status(404).json({ message: 'No team members found for project' });
+    }
+
     res.json(teamMembers);
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
