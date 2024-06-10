@@ -162,7 +162,7 @@ export default {
           id: cat.id
         }));
       } catch (error) {
-        console.error('There was an error fetching the team members!', error);
+        console.error('There was an error fetching the categories!', error);
       }
     },
     async fetchTeamMembers() {
