@@ -30,7 +30,6 @@
               item-title="name"
               item-value="id"
               label="Category"
-              multiple
               required
             ></v-select>
             <v-select

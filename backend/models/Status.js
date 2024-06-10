@@ -14,7 +14,7 @@ const Status = sequelize.define('Status', {
   },
   since: {
     type: DataTypes.DATE,
-    allowNull: false,
+    allowNull: true,
     defaultValue: DataTypes.NOW,
   },
   milestoneDictId: {
