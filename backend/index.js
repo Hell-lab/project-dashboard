@@ -55,10 +55,9 @@ function verifyRequest(req) {
               req.jwtVerifyError = true;
               // Check if the error is because the JWT has expired
               if (err.name === 'TokenExpiredError') {
-                  req.jwtExpired = true; // You can add this line to indicate specifically that the JWT expired
+                  req.jwtExpired = true;
               }
           } else {
-              // console.log("JWT: ", decoded)
               req.jwtPayload = decoded;
           }
       });
@@ -88,7 +87,7 @@ app.use('/login', loginRoutes);
 // The order of our middlewares matters: If we put this before
 // setting up our express.static middleware, JWT would even be checked
 // for every static resource, which would introduce unnecessary overhead.
-//app.use(verifyMiddleware);
+app.use(verifyMiddleware);
 
 app.use('/api/users', userRoutes);
 app.use('/api/stvs', stvDictRoutes);
